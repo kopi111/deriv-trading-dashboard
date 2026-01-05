@@ -1244,6 +1244,28 @@
         let candleSeries = null;
         let currentModalSymbol = null;
 
+        // Cache settings
+        const CACHE_KEY = 'price_action_cache';
+        const CACHE_EXPIRY = 60000; // 1 minute
+
+        function saveToCache(data) {
+            const cache = { timestamp: Date.now(), timeframe: currentTimeframe, data: data };
+            localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+        }
+
+        function loadFromCache() {
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
+                if (cached) {
+                    const { timestamp, timeframe, data } = JSON.parse(cached);
+                    if (Date.now() - timestamp < CACHE_EXPIRY && timeframe === currentTimeframe) {
+                        return data;
+                    }
+                }
+            } catch (e) { }
+            return null;
+        }
+
         // ============================================
         // WEBSOCKET CONNECTION
         // ============================================
@@ -1370,8 +1392,19 @@
 
         async function fetchAllCandleData() {
             const refreshBtn = document.getElementById('refresh-btn');
+            const grid = document.getElementById('assets-grid');
             refreshBtn.disabled = true;
             refreshBtn.innerHTML = '<span class="mini-spinner"></span> Analyzing...';
+
+            // Show cached data immediately
+            const cachedData = loadFromCache();
+            if (cachedData && cachedData.results && cachedData.results.length > 0) {
+                renderAssetCards(cachedData.results);
+                renderSummary(cachedData.results);
+                analysisResults = cachedData.analysisResults || {};
+                candleDataCache = cachedData.candleDataCache || {};
+                document.getElementById('last-updated').textContent = 'Showing cached... updating...';
+            }
 
             const results = [];
 
@@ -1381,27 +1414,27 @@
                     const currentPrice = await fetchCurrentPrice(asset.symbol);
 
                     if (candles && candles.length > 0) {
-                        candleDataCache[asset.symbol] = candles; // Cache candle data
+                        candleDataCache[asset.symbol] = candles;
                         const analysis = analyzePriceAction(asset, candles, currentPrice);
                         results.push(analysis);
                         analysisResults[asset.symbol] = analysis;
                     }
                 } catch (error) {
-                    console.error(`Error analyzing ${asset.symbol}:`, error);
+                    console.error(`Error ${asset.symbol}:`, error);
                 }
 
-                // Small delay between requests
-                await new Promise(resolve => setTimeout(resolve, 200));
+                await new Promise(resolve => setTimeout(resolve, 150));
             }
 
-            // Sort by confidence
             results.sort((a, b) => b.confidence - a.confidence);
 
-            // Render results
-            renderAssetCards(results);
-            renderSummary(results);
-            updateTimestamp();
+            if (results.length > 0) {
+                renderAssetCards(results);
+                renderSummary(results);
+                saveToCache({ results, analysisResults, candleDataCache });
+            }
 
+            updateTimestamp();
             refreshBtn.disabled = false;
             refreshBtn.innerHTML = '<span>&#8635;</span> Refresh Analysis';
         }

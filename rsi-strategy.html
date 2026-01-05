@@ -993,6 +993,33 @@
         let modalChart = null;
         let currentModalSymbol = null;
 
+        // Cache settings
+        const CACHE_KEY = 'rsi_strategy_cache';
+        const CACHE_EXPIRY = 60000; // 1 minute
+
+        function saveToCache(data) {
+            const cache = {
+                timestamp: Date.now(),
+                data: data
+            };
+            localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+        }
+
+        function loadFromCache() {
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
+                if (cached) {
+                    const { timestamp, data } = JSON.parse(cached);
+                    if (Date.now() - timestamp < CACHE_EXPIRY) {
+                        return data;
+                    }
+                }
+            } catch (e) {
+                console.log('Cache read error:', e);
+            }
+            return null;
+        }
+
         // ============================================
         // WEBSOCKET CONNECTION
         // ============================================
@@ -1166,8 +1193,18 @@
             refreshBtn.disabled = true;
             refreshBtn.innerHTML = '<span class="mini-spinner"></span> Analyzing...';
 
-            // Show loading state
-            grid.innerHTML = '<div class="loading" style="grid-column: 1 / -1;"><div class="loading-spinner"></div><p>Fetching live RSI data...</p></div>';
+            // Try to show cached data immediately
+            const cachedData = loadFromCache();
+            if (cachedData && cachedData.results && cachedData.results.length > 0) {
+                console.log('Showing cached data while fetching fresh...');
+                renderSignalCards(cachedData.results);
+                updateSignalCount(cachedData.results);
+                signalResults = cachedData.signalResults || {};
+                candleDataCache = cachedData.candleDataCache || {};
+                document.getElementById('last-updated').textContent = 'Showing cached data... updating...';
+            } else {
+                grid.innerHTML = '<div class="loading" style="grid-column: 1 / -1;"><div class="loading-spinner"></div><p>Fetching live RSI data...</p></div>';
+            }
 
             const results = [];
             let successCount = 0;
@@ -1175,7 +1212,6 @@
 
             for (const asset of assets) {
                 try {
-                    console.log(`Fetching ${asset.symbol}...`);
                     const candles = await fetchCandleData(asset.symbol);
 
                     if (candles && candles.length > 0) {
@@ -1184,22 +1220,18 @@
                         results.push(signal);
                         signalResults[asset.symbol] = signal;
                         successCount++;
-                        console.log(`${asset.symbol}: RSI = ${signal.rsi.toFixed(1)}, Signal = ${signal.signal}`);
                     } else {
-                        console.warn(`No candles for ${asset.symbol}`);
                         errorCount++;
                     }
                 } catch (error) {
-                    console.error(`Error analyzing ${asset.symbol}:`, error.message);
+                    console.error(`Error ${asset.symbol}:`, error.message);
                     errorCount++;
                 }
 
-                await new Promise(resolve => setTimeout(resolve, 300));
+                await new Promise(resolve => setTimeout(resolve, 150));
             }
 
-            console.log(`Completed: ${successCount} success, ${errorCount} errors`);
-
-            // Sort by signal strength (active signals first, then by RSI distance from trigger)
+            // Sort by signal strength
             results.sort((a, b) => {
                 if (a.hasSignal && !b.hasSignal) return -1;
                 if (!a.hasSignal && b.hasSignal) return 1;
@@ -1209,12 +1241,13 @@
             if (results.length > 0) {
                 renderSignalCards(results);
                 updateSignalCount(results);
-            } else {
-                grid.innerHTML = '<div class="loading" style="grid-column: 1 / -1;"><p style="color: #ff4466;">Failed to load data. Check connection and refresh.</p></div>';
+                // Save to cache
+                saveToCache({ results, signalResults, candleDataCache });
+            } else if (!cachedData) {
+                grid.innerHTML = '<div class="loading" style="grid-column: 1 / -1;"><p style="color: #ff4466;">Failed to load. Check connection and refresh.</p></div>';
             }
 
             updateTimestamp();
-
             refreshBtn.disabled = false;
             refreshBtn.innerHTML = '<span>&#8635;</span> Refresh';
         }

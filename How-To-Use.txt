@@ -1,0 +1,70 @@
+DERIV TRADING DASHBOARD - HOW TO USE
+=====================================
+
+Website: https://kopi111.github.io/deriv-trading-dashboard/
+
+This app gives you LIVE trading signals for Volatility Indices (V10, V25, V50, V75, V100).
+
+
+3 PAGES TO USE:
+===============
+
+1. LIVE DASHBOARD (Main Page)
+   - Shows live candlestick chart
+   - Pick your index from dropdown (V10, V25, V50, V75, V100)
+   - Pick timeframe (1M, 5M, 15M, 1H, 4H, 1D)
+   - RSI indicator at bottom shows when to buy/sell
+
+2. PRICE ACTION (Click "Price Action" link)
+   - Shows cards for each index
+   - Green = BUY signal
+   - Red = SELL signal
+   - Yellow = WAIT (no signal)
+   - Click any card to see the chart with entry points
+
+3. RSI STRATEGY (Click "RSI Strategy" link)
+   - Uses backtested settings that actually work
+   - Shows BUY when RSI drops too low
+   - Shows SELL when RSI goes too high
+   - Each index has different settings (already optimized)
+
+
+HOW TO TRADE:
+=============
+
+Step 1: Open RSI Strategy page
+Step 2: Look for BUY or SELL signals (not WAIT)
+Step 3: Click the card to see Entry, Stop Loss, Take Profit
+Step 4: Place your trade on Deriv with those levels
+
+
+BEST INDICES TO TRADE:
+======================
+
+V50 - Best win rate (53.7%)
+V75 - Best risk/reward (Sharpe 1.53)
+
+
+RSI SETTINGS (Already Built In):
+================================
+
+V10:  Buy when RSI < 20, Sell when RSI > 80
+V25:  Buy when RSI < 20, Sell when RSI > 75
+V50:  Buy when RSI < 35, Sell when RSI > 65  <-- BEST
+V75:  Buy when RSI < 25, Sell when RSI > 75
+V100: Buy when RSI < 25, Sell when RSI > 80
+
+
+TIPS:
+=====
+
+- Wait for ACTIVE signals (BUY or SELL), don't force trades
+- Always use the Stop Loss shown
+- 15-minute timeframe works best
+- Refresh the page to get latest signals
+- Works on phone too!
+
+
+That's it! Open the website and start trading.
+
+Website: https://kopi111.github.io/deriv-trading-dashboard/
