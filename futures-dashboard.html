@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futures Trading Dashboard - Live Trade Recommendations</title>
+    <style>
+        /* Theme Variables */
+        :root {
+            --bg-primary: #0f0f1a;
+            --bg-secondary: #1a1a2e;
+            --bg-card: rgba(26, 26, 46, 0.95);
+            --bg-card-inner: rgba(15, 15, 26, 0.6);
+            --border-color: #2d2d4a;
+            --text-primary: #e0e0e0;
+            --text-secondary: #888;
+            --accent-1: #00d4ff;
+            --accent-2: #7b2cbf;
+            --green: #00ff88;
+            --red: #ff4466;
+            --yellow: #ffc800;
+        }
+
+        [data-theme="dark-purple"] {
+            --bg-primary: #0f0f1a;
+            --bg-secondary: #1a1a2e;
+            --bg-card: rgba(26, 26, 46, 0.95);
+            --bg-card-inner: rgba(15, 15, 26, 0.6);
+            --border-color: #2d2d4a;
+            --text-primary: #e0e0e0;
+            --text-secondary: #888;
+            --accent-1: #00d4ff;
+            --accent-2: #7b2cbf;
+        }
+
+        [data-theme="dark-blue"] {
+            --bg-primary: #0a1628;
+            --bg-secondary: #0d2137;
+            --bg-card: rgba(13, 33, 55, 0.95);
+            --bg-card-inner: rgba(10, 22, 40, 0.6);
+            --border-color: #1e3a5f;
+            --text-primary: #e0e8f0;
+            --text-secondary: #7a9bb8;
+            --accent-1: #3b9eff;
+            --accent-2: #0066cc;
+        }
+
+        [data-theme="dark-green"] {
+            --bg-primary: #0a1a14;
+            --bg-secondary: #0d2a1e;
+            --bg-card: rgba(13, 42, 30, 0.95);
+            --bg-card-inner: rgba(10, 26, 20, 0.6);
+            --border-color: #1e5f3a;
+            --text-primary: #e0f0e8;
+            --text-secondary: #7ab898;
+            --accent-1: #00ff88;
+            --accent-2: #00cc6a;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.95);
+            --bg-card-inner: rgba(245, 247, 250, 0.8);
+            --border-color: #e0e4e8;
+            --text-primary: #1a1a2e;
+            --text-secondary: #666;
+            --accent-1: #0088cc;
+            --accent-2: #6b21a8;
+            --green: #00aa55;
+            --red: #dd3344;
+            --yellow: #cc9900;
+        }
+
+        [data-theme="midnight"] {
+            --bg-primary: #000000;
+            --bg-secondary: #111111;
+            --bg-card: rgba(17, 17, 17, 0.95);
+            --bg-card-inner: rgba(0, 0, 0, 0.6);
+            --border-color: #222222;
+            --text-primary: #ffffff;
+            --text-secondary: #777;
+            --accent-1: #ff6b00;
+            --accent-2: #ff3366;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .header {
+            background: var(--bg-card);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: var(--bg-card-inner);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover {
+            border-color: var(--accent-1);
+            color: var(--accent-1);
+        }
+
+        .nav-link.active {
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.15);
+            border: 1px solid #00ff88;
+            font-weight: 600;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 13px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff88;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .theme-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn:hover { transform: scale(1.15); }
+        .theme-btn.active { border-color: var(--accent-1); box-shadow: 0 0 8px var(--accent-1); }
+        .theme-btn[data-theme="dark-purple"] { background: linear-gradient(135deg, #0f0f1a, #7b2cbf); }
+        .theme-btn[data-theme="dark-blue"] { background: linear-gradient(135deg, #0a1628, #3b9eff); }
+        .theme-btn[data-theme="dark-green"] { background: linear-gradient(135deg, #0a1a14, #00ff88); }
+        .theme-btn[data-theme="light"] { background: linear-gradient(135deg, #f5f7fa, #0088cc); }
+        .theme-btn[data-theme="midnight"] { background: linear-gradient(135deg, #000000, #ff6b00); }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .refresh-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .main-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-title p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        /* Trade Now Hero Section */
+        .trade-now-hero {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trade-now-hero.bullish {
+            border-color: var(--green);
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.15);
+        }
+
+        .trade-now-hero.bearish {
+            border-color: var(--red);
+            box-shadow: 0 0 40px rgba(255, 68, 102, 0.15);
+        }
+
+        .trade-now-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .trade-now-hero.bullish::before {
+            background: linear-gradient(90deg, var(--green), #00cc6a);
+        }
+
+        .trade-now-hero.bearish::before {
+            background: linear-gradient(90deg, var(--red), #cc2244);
+        }
+
+        .trade-now-label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .trade-now-label .pulse-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        .trade-now-hero.bullish .trade-now-label { color: var(--green); }
+        .trade-now-hero.bullish .pulse-dot { background: var(--green); }
+        .trade-now-hero.bearish .trade-now-label { color: var(--red); }
+        .trade-now-hero.bearish .pulse-dot { background: var(--red); }
+
+        .trade-now-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .trade-now-symbol {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .trade-now-name {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .trade-now-direction {
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .trade-now-levels {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .trade-level {
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            background: var(--bg-card-inner);
+            border: 1px solid var(--border-color);
+        }
+
+        .trade-level label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .trade-level .value {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .trade-level.entry .value { color: var(--accent-1); }
+        .trade-level.sl .value { color: var(--red); }
+        .trade-level.tp .value { color: var(--green); }
+
+        .trade-now-reasoning {
+            background: var(--bg-card-inner);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .trade-now-reasoning h4 {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .trade-now-reasoning p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .confidence-bar-large {
+            margin-top: 15px;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--bg-card-inner);
+            overflow: hidden;
+        }
+
+        .confidence-bar-large .fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .confidence-label {
+            margin-top: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        /* Summary Section */
+        .summary-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .summary-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .summary-card {
+            background: var(--bg-card-inner);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .summary-card .label {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .summary-card .value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .summary-card .sub {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Sentiment Gauge */
+        .sentiment-gauge {
+            width: 100%;
+            height: 12px;
+            border-radius: 6px;
+            background: linear-gradient(90deg, var(--red) 0%, var(--yellow) 50%, var(--green) 100%);
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .sentiment-needle {
+            position: absolute;
+            top: -4px;
+            width: 4px;
+            height: 20px;
+            background: white;
+            border-radius: 2px;
+            transform: translateX(-50%);
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+            transition: left 0.5s ease;
+        }
+
+        .sentiment-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 6px;
+            background: var(--bg-card);
+            padding: 6px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .filter-btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            color: var(--text-primary);
+            background: var(--bg-card-inner);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
+            color: white;
+            font-weight: 600;
+        }
+
+        .filter-btn.buy-active {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--green);
+            border: 1px solid var(--green);
+        }
+
+        .filter-btn.sell-active {
+            background: rgba(255, 68, 102, 0.2);
+            color: var(--red);
+            border: 1px solid var(--red);
+        }
+
+        .filter-separator {
+            color: var(--text-secondary);
+            font-size: 16px;
+            padding: 0 5px;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 20px;
+        }
+
+        .futures-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .futures-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent-1);
+        }
+
+        .futures-card.hidden {
+            display: none;
+        }
+
+        .best-trade-banner {
+            position: absolute;
+            top: 12px;
+            right: -35px;
+            background: linear-gradient(135deg, var(--yellow), #ff9500);
+            color: #000;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            padding: 5px 40px;
+            transform: rotate(45deg);
+            z-index: 5;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .card-symbol {
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .card-name {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .card-badges {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .badge-index { background: rgba(0, 212, 255, 0.15); color: var(--accent-1); }
+        .badge-micro { background: rgba(123, 44, 191, 0.2); color: #b388ff; }
+        .badge-europe { background: rgba(255, 200, 0, 0.15); color: var(--yellow); }
+        .badge-asia { background: rgba(255, 106, 0, 0.15); color: #ff6a00; }
+
+        .price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .last-price {
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .change-info {
+            display: flex;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .change-positive { color: var(--green); }
+        .change-negative { color: var(--red); }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .data-item {
+            background: var(--bg-card-inner);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .data-item .label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .data-item .value {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Analysis Section */
+        .analysis-section {
+            background: var(--bg-card-inner);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .analysis-section h4 {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--accent-1);
+            margin-bottom: 8px;
+        }
+
+        .analysis-text {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .analysis-text .highlight {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Trade Recommendation */
+        .trade-rec {
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid;
+        }
+
+        .trade-rec.bullish {
+            background: rgba(0, 255, 136, 0.05);
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .trade-rec.bearish {
+            background: rgba(255, 68, 102, 0.05);
+            border-color: rgba(255, 68, 102, 0.3);
+        }
+
+        .trade-rec.neutral {
+            background: rgba(255, 200, 0, 0.05);
+            border-color: rgba(255, 200, 0, 0.3);
+        }
+
+        .trade-rec-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .trade-rec-header h4 {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .trade-rec.bullish .trade-rec-header h4 { color: var(--green); }
+        .trade-rec.bearish .trade-rec-header h4 { color: var(--red); }
+        .trade-rec.neutral .trade-rec-header h4 { color: var(--yellow); }
+
+        .confidence-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .confidence-high { background: rgba(0, 255, 136, 0.2); color: var(--green); }
+        .confidence-medium { background: rgba(255, 200, 0, 0.2); color: var(--yellow); }
+        .confidence-low { background: rgba(255, 68, 102, 0.2); color: var(--red); }
+
+        .trade-levels {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .trade-levels .level {
+            text-align: center;
+            padding: 8px;
+            border-radius: 8px;
+            background: var(--bg-card-inner);
+        }
+
+        .trade-levels .level .label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .trade-levels .level .value {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .trade-levels .level.entry .value { color: var(--accent-1); }
+        .trade-levels .level.sl .value { color: var(--red); }
+        .trade-levels .level.tp .value { color: var(--green); }
+
+        /* Confidence bar */
+        .confidence-bar {
+            margin-top: 10px;
+            height: 4px;
+            border-radius: 2px;
+            background: var(--bg-card-inner);
+            overflow: hidden;
+        }
+
+        .confidence-bar .fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        .confidence-bar .fill.high { background: var(--green); }
+        .confidence-bar .fill.medium { background: var(--yellow); }
+        .confidence-bar .fill.low { background: var(--red); }
+
+        /* Countdown */
+        .countdown {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+        }
+
+        .countdown span {
+            color: var(--accent-1);
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .trade-now-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px 15px;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .trade-now-levels {
+                grid-template-columns: 1fr;
+            }
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark-purple">
+
+    <header class="header">
+        <div class="logo">
+            <svg width="32" height="32" viewBox="0 0 32 32">
+                <rect width="32" height="32" rx="8" fill="url(#grad1)"/>
+                <defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#00d4ff"/>
+                    <stop offset="100%" style="stop-color:#7b2cbf"/>
+                </linearGradient></defs>
+                <path d="M8 22 L14 12 L18 16 L24 8" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            </svg>
+            <h1>Futures Dashboard</h1>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html" class="nav-link">&#8592; Live Dashboard</a>
+            <span style="color: var(--text-secondary);">|</span>
+            <a href="price-action-analysis.html" class="nav-link">&#128202; Price Action</a>
+            <a href="rsi-strategy.html" class="nav-link">&#128200; RSI Strategy</a>
+            <a href="audusd-strategy.html" class="nav-link">&#128176; AUD/USD</a>
+            <a href="futures-dashboard.html" class="nav-link active">&#128293; Futures</a>
+        </nav>
+        <div class="header-right">
+            <div class="connection-status">
+                <div class="status-dot"></div>
+                <span>Data Loaded</span>
+            </div>
+            <div class="theme-selector">
+                <button class="theme-btn active" data-theme="dark-purple" title="Dark Purple"></button>
+                <button class="theme-btn" data-theme="dark-blue" title="Dark Blue"></button>
+                <button class="theme-btn" data-theme="dark-green" title="Dark Green"></button>
+                <button class="theme-btn" data-theme="light" title="Light"></button>
+                <button class="theme-btn" data-theme="midnight" title="Midnight"></button>
+            </div>
+            <button class="refresh-btn" onclick="refreshAnalysis()">
+                <span>&#8635;</span> Refresh
+            </button>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="page-title">
+            <h2>Futures Trading Dashboard <span class="live-badge">&#9679; LIVE</span></h2>
+            <p>CME & Eurex futures with real-time price action analysis and trade recommendations</p>
+        </div>
+        <div class="last-updated" id="last-updated">Last updated: --</div>
+
+        <!-- TRADE NOW Hero -->
+        <div id="trade-now-hero"></div>
+
+        <!-- Summary Section -->
+        <div class="summary-section">
+            <div class="summary-title">&#128202; Market Overview</div>
+            <div class="summary-grid" id="summary-grid"></div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="filter-group" id="category-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="indices">Indices</button>
+                <button class="filter-btn" data-filter="micro">Micro</button>
+                <button class="filter-btn" data-filter="europe">Europe</button>
+                <button class="filter-btn" data-filter="asia">Asia</button>
+            </div>
+            <span class="filter-separator">|</span>
+            <div class="filter-group" id="signal-filters">
+                <button class="filter-btn" data-signal="buy">&#9650; Buy Signals</button>
+                <button class="filter-btn" data-signal="sell">&#9660; Sell Signals</button>
+            </div>
+        </div>
+
+        <!-- Cards -->
+        <div class="cards-grid" id="cards-grid"></div>
+
+        <!-- Countdown -->
+        <div class="countdown">
+            Next refresh in <span id="countdown">60</span> seconds
+        </div>
+    </main>
+
+    <script>
+        // ========== FUTURES DATA (swap this for live API later) ==========
+        function getFuturesData() {
+            return [
+                { symbol: 'ESH6', name: 'S&P 500 E-mini', last: 6797.25, change: 0.50, pctChange: 0.01, high: 6822.50, low: 6764.00, volume: 523172, categories: ['indices'] },
+                { symbol: 'FESXH6', name: 'Euro Stoxx 50', last: 5812.0, change: -22.0, pctChange: -0.38, high: 5844.0, low: 5755.0, volume: 424860, categories: ['indices', 'europe'] },
+                { symbol: 'NQH6', name: 'Nasdaq 100 E-mini', last: 25101.75, change: 119.25, pctChange: 0.48, high: 25180.00, low: 24895.75, volume: 184082, categories: ['indices'] },
+                { symbol: 'YMH6', name: 'Dow Jones E-mini', last: 47567, change: -228, pctChange: -0.48, high: 47970, low: 47401, volume: 61304, categories: ['indices'] },
+                { symbol: 'MESH6', name: 'Micro S&P 500', last: 6797.25, change: 10.00, pctChange: 0.15, high: 6822.75, low: 6763.75, volume: 772480, categories: ['micro'] },
+                { symbol: 'MNQH6', name: 'Micro Nasdaq', last: 25102.50, change: 120.00, pctChange: 0.48, high: 25180.00, low: 24895.25, volume: 844227, categories: ['micro'] },
+                { symbol: 'MYMH6', name: 'Micro Dow', last: 47566, change: -179, pctChange: -0.37, high: 47970, low: 47403, volume: 97457, categories: ['micro'] },
+                { symbol: 'MCH6', name: 'Micro Crude Oil', last: 2662.00, change: 20.50, pctChange: 0.78, high: 2670.00, low: 2590.25, volume: 464, categories: ['micro'] },
+                { symbol: 'FDAXH6', name: 'DAX Futures', last: 23763.0, change: -190.0, pctChange: -0.79, high: 24009.0, low: 23539.0, volume: 25278, categories: ['indices', 'europe'] },
+                { symbol: 'EMDH6', name: 'S&P MidCap E-mini', last: 3420.30, change: -9.00, pctChange: -0.26, high: 3444.00, low: 3395.60, volume: 3493, categories: ['indices'] },
+                { symbol: 'NKDM6', name: 'Nikkei 225', last: 54785, change: -45, pctChange: -0.08, high: 55660, low: 54240, volume: 2507, categories: ['indices', 'asia'] },
+                { symbol: 'FDXMH6', name: 'Mini DAX', last: 23761.0, change: -192.0, pctChange: -0.80, high: 24009.0, low: 23539.0, volume: 24728, categories: ['micro', 'europe'] }
+            ];
+        }
+
+        // ========== ANALYSIS ENGINE ==========
+        function analyzeFuture(f) {
+            const midpoint = (f.high + f.low) / 2;
+            const range = f.high - f.low;
+            const aboveMid = f.last > midpoint;
+            const positiveChange = f.change > 0;
+            const distFromHigh = ((f.high - f.last) / range * 100).toFixed(1);
+            const distFromLow = ((f.last - f.low) / range * 100).toFixed(1);
+
+            // Direction
+            let direction, bias;
+            if (aboveMid && positiveChange) {
+                direction = 'BULLISH';
+                bias = 'Bullish bias, trading above session midpoint';
+            } else if (!aboveMid && !positiveChange) {
+                direction = 'BEARISH';
+                bias = 'Bearish bias, trading below session midpoint';
+            } else if (aboveMid && !positiveChange) {
+                direction = 'BEARISH';
+                bias = 'Fading from highs, negative change despite being above midpoint';
+            } else {
+                direction = 'BULLISH';
+                bias = 'Recovering from lows, positive change despite being below midpoint';
+            }
+
+            // Volume analysis
+            const avgVol = 203500; // rough average of all volumes
+            let volAnalysis;
+            if (f.volume > avgVol * 1.5) volAnalysis = 'Very high volume - strong conviction';
+            else if (f.volume > avgVol) volAnalysis = 'Above average volume - moderate conviction';
+            else if (f.volume > avgVol * 0.3) volAnalysis = 'Below average volume - lower conviction';
+            else volAnalysis = 'Thin volume - low conviction, wider spreads likely';
+
+            // Trade levels
+            let entry = f.last;
+            let sl, tp;
+            if (direction === 'BULLISH') {
+                sl = f.low;
+                tp = f.high + range * 0.5;
+            } else {
+                sl = f.high;
+                tp = f.low - range * 0.5;
+            }
+
+            // Confidence score (0-100)
+            let confidence = 50;
+            // Direction alignment bonus
+            if ((aboveMid && positiveChange) || (!aboveMid && !positiveChange)) confidence += 15;
+            // Change magnitude
+            confidence += Math.min(Math.abs(f.pctChange) * 30, 20);
+            // Distance from extreme (closer to favorable extreme = better)
+            if (direction === 'BULLISH') {
+                confidence += (parseFloat(distFromLow) / 100) * 10;
+            } else {
+                confidence += (parseFloat(distFromHigh) / 100) * 10;
+            }
+            // Volume bonus
+            if (f.volume > avgVol) confidence += 5;
+            if (f.volume > avgVol * 1.5) confidence += 5;
+
+            confidence = Math.min(Math.round(confidence), 95);
+
+            let confidenceLevel;
+            if (confidence >= 70) confidenceLevel = 'high';
+            else if (confidence >= 50) confidenceLevel = 'medium';
+            else confidenceLevel = 'low';
+
+            const rangeAnalysis = `Price at ${distFromLow}% above session low, ${distFromHigh}% below session high. Session range: ${range.toFixed(2)} pts.`;
+
+            return {
+                ...f,
+                midpoint,
+                range,
+                direction,
+                bias,
+                rangeAnalysis,
+                volAnalysis,
+                entry,
+                sl,
+                tp,
+                confidence,
+                confidenceLevel
+            };
+        }
+
+        // ========== RENDERING ==========
+        function formatNumber(n) {
+            if (n >= 10000) return n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+            return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function formatVolume(v) {
+            if (v >= 1000000) return (v / 1000000).toFixed(1) + 'M';
+            if (v >= 1000) return (v / 1000).toFixed(1) + 'K';
+            return v.toString();
+        }
+
+        function getCategoryBadges(categories) {
+            const map = {
+                indices: '<span class="badge badge-index">INDEX</span>',
+                micro: '<span class="badge badge-micro">MICRO</span>',
+                europe: '<span class="badge badge-europe">EUROPE</span>',
+                asia: '<span class="badge badge-asia">ASIA</span>'
+            };
+            return categories.map(c => map[c] || '').join('');
+        }
+
+        function renderTradeNowHero(best) {
+            const el = document.getElementById('trade-now-hero');
+            const isBull = best.direction === 'BULLISH';
+            const dirClass = isBull ? 'bullish' : 'bearish';
+            const arrow = isBull ? '&#9650;' : '&#9660;';
+            const changeClass = best.change >= 0 ? 'change-positive' : 'change-negative';
+            const changeSign = best.change >= 0 ? '+' : '';
+
+            const riskReward = Math.abs(best.tp - best.entry) / Math.abs(best.entry - best.sl);
+
+            el.innerHTML = `
+                <div class="trade-now-hero ${dirClass}">
+                    <div class="trade-now-label">
+                        <div class="pulse-dot"></div>
+                        BEST TRADE RIGHT NOW
+                    </div>
+                    <div class="trade-now-content">
+                        <div>
+                            <div class="trade-now-symbol">${best.symbol}</div>
+                            <div class="trade-now-name">${best.name}</div>
+                            <div class="trade-now-direction" style="color: ${isBull ? 'var(--green)' : 'var(--red)'};">
+                                ${arrow} ${best.direction} &mdash; ${changeSign}${best.pctChange.toFixed(2)}%
+                            </div>
+                            <div style="margin-top: 6px; font-size: 13px; color: var(--text-secondary);">
+                                Risk/Reward: <strong style="color: var(--accent-1);">${riskReward.toFixed(2)}:1</strong>
+                                &nbsp;|&nbsp; Confidence: <strong style="color: ${best.confidenceLevel === 'high' ? 'var(--green)' : best.confidenceLevel === 'medium' ? 'var(--yellow)' : 'var(--red)'};">${best.confidence}%</strong>
+                            </div>
+                        </div>
+                        <div class="trade-now-levels">
+                            <div class="trade-level entry">
+                                <label>Entry</label>
+                                <div class="value">${formatNumber(best.entry)}</div>
+                            </div>
+                            <div class="trade-level sl">
+                                <label>Stop Loss</label>
+                                <div class="value">${formatNumber(best.sl)}</div>
+                            </div>
+                            <div class="trade-level tp">
+                                <label>Take Profit</label>
+                                <div class="value">${formatNumber(best.tp)}</div>
+                            </div>
+                        </div>
+                        <div class="trade-now-reasoning">
+                            <h4>Why This Trade</h4>
+                            <p>${best.bias}. ${best.rangeAnalysis} ${best.volAnalysis}.
+                            ${isBull ? 'Targeting extension above session high with stop at session low.' : 'Targeting extension below session low with stop at session high.'}
+                            Risk/reward ratio of ${riskReward.toFixed(2)}:1 favors this setup.</p>
+                            <div class="confidence-bar-large">
+                                <div class="fill" style="width: ${best.confidence}%; background: ${isBull ? 'var(--green)' : 'var(--red)'};"></div>
+                            </div>
+                            <div class="confidence-label" style="color: ${isBull ? 'var(--green)' : 'var(--red)'};">Confidence: ${best.confidence}%</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSummary(analyzed) {
+            const bullish = analyzed.filter(a => a.direction === 'BULLISH').length;
+            const bearish = analyzed.filter(a => a.direction === 'BEARISH').length;
+            const sentimentPct = (bullish / analyzed.length) * 100;
+            const bestTrade = analyzed[0]; // already sorted by confidence
+
+            const grid = document.getElementById('summary-grid');
+            grid.innerHTML = `
+                <div class="summary-card">
+                    <div class="label">Bullish</div>
+                    <div class="value" style="color: var(--green);">${bullish}</div>
+                    <div class="sub">futures with upside bias</div>
+                </div>
+                <div class="summary-card">
+                    <div class="label">Bearish</div>
+                    <div class="value" style="color: var(--red);">${bearish}</div>
+                    <div class="sub">futures with downside bias</div>
+                </div>
+                <div class="summary-card">
+                    <div class="label">Best Trade</div>
+                    <div class="value" style="color: var(--accent-1);">${bestTrade.symbol}</div>
+                    <div class="sub">${bestTrade.direction} | ${bestTrade.confidence}% confidence</div>
+                </div>
+                <div class="summary-card">
+                    <div class="label">Market Sentiment</div>
+                    <div class="value" style="color: ${sentimentPct > 55 ? 'var(--green)' : sentimentPct < 45 ? 'var(--red)' : 'var(--yellow)'};">${sentimentPct > 55 ? 'Bullish' : sentimentPct < 45 ? 'Bearish' : 'Mixed'}</div>
+                    <div class="sentiment-gauge">
+                        <div class="sentiment-needle" style="left: ${sentimentPct}%;"></div>
+                    </div>
+                    <div class="sentiment-labels">
+                        <span>Bearish</span>
+                        <span>Neutral</span>
+                        <span>Bullish</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCard(a, isBest) {
+            const isBull = a.direction === 'BULLISH';
+            const changeClass = a.change >= 0 ? 'change-positive' : 'change-negative';
+            const changeSign = a.change >= 0 ? '+' : '';
+            const dirClass = isBull ? 'bullish' : 'bearish';
+            const arrow = isBull ? '&#9650;' : '&#9660;';
+
+            return `
+                <div class="futures-card" data-categories='${JSON.stringify(a.categories)}' data-direction="${a.direction}">
+                    ${isBest ? '<div class="best-trade-banner">BEST TRADE</div>' : ''}
+                    <div class="card-header">
+                        <div>
+                            <div class="card-symbol">${a.symbol}</div>
+                            <div class="card-name">${a.name}</div>
+                        </div>
+                        <div class="card-badges">${getCategoryBadges(a.categories)}</div>
+                    </div>
+                    <div class="price-row">
+                        <span class="last-price">${formatNumber(a.last)}</span>
+                        <div class="change-info">
+                            <span class="${changeClass}">${changeSign}${a.change.toFixed(2)}</span>
+                            <span class="${changeClass}">(${changeSign}${a.pctChange.toFixed(2)}%)</span>
+                        </div>
+                    </div>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <div class="label">High</div>
+                            <div class="value">${formatNumber(a.high)}</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="label">Low</div>
+                            <div class="value">${formatNumber(a.low)}</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="label">Volume</div>
+                            <div class="value">${formatVolume(a.volume)}</div>
+                        </div>
+                    </div>
+                    <div class="analysis-section">
+                        <h4>Price Action Analysis</h4>
+                        <div class="analysis-text">
+                            <span class="highlight">${a.bias}.</span><br>
+                            ${a.rangeAnalysis}<br>
+                            ${a.volAnalysis}.
+                        </div>
+                    </div>
+                    <div class="trade-rec ${dirClass}">
+                        <div class="trade-rec-header">
+                            <h4>${arrow} ${a.direction} Trade Setup</h4>
+                            <span class="confidence-badge confidence-${a.confidenceLevel}">${a.confidence}%</span>
+                        </div>
+                        <div class="trade-levels">
+                            <div class="level entry">
+                                <div class="label">Entry</div>
+                                <div class="value">${formatNumber(a.entry)}</div>
+                            </div>
+                            <div class="level sl">
+                                <div class="label">Stop Loss</div>
+                                <div class="value">${formatNumber(a.sl)}</div>
+                            </div>
+                            <div class="level tp">
+                                <div class="label">Take Profit</div>
+                                <div class="value">${formatNumber(a.tp)}</div>
+                            </div>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="fill ${a.confidenceLevel}" style="width: ${a.confidence}%;"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ========== MAIN RENDER ==========
+        let analyzedData = [];
+
+        function refreshAnalysis() {
+            const raw = getFuturesData();
+            analyzedData = raw.map(analyzeFuture).sort((a, b) => b.confidence - a.confidence);
+
+            // Best trade (highest confidence, non-neutral)
+            const best = analyzedData[0];
+            renderTradeNowHero(best);
+            renderSummary(analyzedData);
+
+            // Render cards
+            const grid = document.getElementById('cards-grid');
+            grid.innerHTML = analyzedData.map((a, i) => renderCard(a, i === 0)).join('');
+
+            // Update timestamp
+            document.getElementById('last-updated').textContent = 'Last updated: ' + new Date().toLocaleString();
+
+            // Reset countdown
+            countdownSeconds = 60;
+
+            // Apply active filters
+            applyFilters();
+        }
+
+        // ========== FILTERS ==========
+        let activeCategory = 'all';
+        let activeSignal = null;
+
+        function applyFilters() {
+            const cards = document.querySelectorAll('.futures-card');
+            cards.forEach(card => {
+                const cats = JSON.parse(card.dataset.categories);
+                const dir = card.dataset.direction;
+
+                let show = true;
+
+                // Category filter
+                if (activeCategory !== 'all') {
+                    if (!cats.includes(activeCategory)) show = false;
+                }
+
+                // Signal filter
+                if (activeSignal === 'buy' && dir !== 'BULLISH') show = false;
+                if (activeSignal === 'sell' && dir !== 'BEARISH') show = false;
+
+                card.classList.toggle('hidden', !show);
+            });
+        }
+
+        // Category filter buttons
+        document.getElementById('category-filters').addEventListener('click', (e) => {
+            if (!e.target.classList.contains('filter-btn')) return;
+            document.querySelectorAll('#category-filters .filter-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            activeCategory = e.target.dataset.filter;
+            applyFilters();
+        });
+
+        // Signal filter buttons (toggle)
+        document.getElementById('signal-filters').addEventListener('click', (e) => {
+            if (!e.target.classList.contains('filter-btn')) return;
+            const sig = e.target.dataset.signal;
+
+            if (activeSignal === sig) {
+                // Deactivate
+                activeSignal = null;
+                e.target.classList.remove('buy-active', 'sell-active');
+            } else {
+                // Activate this, deactivate other
+                document.querySelectorAll('#signal-filters .filter-btn').forEach(b => b.classList.remove('buy-active', 'sell-active'));
+                activeSignal = sig;
+                e.target.classList.add(sig === 'buy' ? 'buy-active' : 'sell-active');
+            }
+            applyFilters();
+        });
+
+        // ========== THEME ==========
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.body.setAttribute('data-theme', btn.dataset.theme);
+                localStorage.setItem('futures-theme', btn.dataset.theme);
+            });
+        });
+
+        // Restore theme
+        const savedTheme = localStorage.getItem('futures-theme');
+        if (savedTheme) {
+            document.body.setAttribute('data-theme', savedTheme);
+            document.querySelectorAll('.theme-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.theme === savedTheme);
+            });
+        }
+
+        // ========== AUTO-REFRESH COUNTDOWN ==========
+        let countdownSeconds = 60;
+
+        setInterval(() => {
+            countdownSeconds--;
+            if (countdownSeconds <= 0) {
+                refreshAnalysis();
+            }
+            document.getElementById('countdown').textContent = countdownSeconds;
+        }, 1000);
+
+        // ========== INIT ==========
+        refreshAnalysis();
+    </script>
+</body>
+</html>
