@@ -576,6 +576,24 @@
             border-color: transparent;
         }
 
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card-inner);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
+            color: white;
+            border-color: transparent;
+        }
+
         /* Loading State */
         .loading {
             text-align: center;
@@ -1074,20 +1092,20 @@
         <!-- Filter Bar -->
         <div class="timeframe-selector" style="margin-top: 10px; gap: 8px; flex-wrap: wrap;">
             <span style="color: var(--text-secondary); font-size: 13px; margin-right: 5px;">Filter:</span>
-            <button class="tf-btn active" onclick="filterAssets('all')" data-filter="all">All</button>
-            <button class="tf-btn" onclick="filterAssets('best')" data-filter="best" style="background: linear-gradient(135deg, #00ff88, #00cc66); color: #000; font-weight: 700;">&#9733; Best Trade</button>
-            <button class="tf-btn" onclick="filterAssets('strong-buy')" data-filter="strong-buy">Strong Buy</button>
-            <button class="tf-btn" onclick="filterAssets('buy')" data-filter="buy">Buy</button>
-            <button class="tf-btn" onclick="filterAssets('sell')" data-filter="sell">Sell</button>
-            <button class="tf-btn" onclick="filterAssets('strong-sell')" data-filter="strong-sell">Strong Sell</button>
+            <button class="filter-btn active" onclick="filterAssets('all')" data-filter="all">All</button>
+            <button class="filter-btn" onclick="filterAssets('best')" data-filter="best" style="background: linear-gradient(135deg, #00ff88, #00cc66); color: #000; font-weight: 700;">&#9733; Best Trade</button>
+            <button class="filter-btn" onclick="filterAssets('strong-buy')" data-filter="strong-buy">Strong Buy</button>
+            <button class="filter-btn" onclick="filterAssets('buy')" data-filter="buy">Buy</button>
+            <button class="filter-btn" onclick="filterAssets('sell')" data-filter="sell">Sell</button>
+            <button class="filter-btn" onclick="filterAssets('strong-sell')" data-filter="strong-sell">Strong Sell</button>
             <span style="color: var(--text-secondary); font-size: 13px; margin-left: 10px;">|</span>
-            <button class="tf-btn" onclick="filterAssets('forex')" data-filter="forex" style="border-color: #3b9eff;">&#128177; Forex</button>
-            <button class="tf-btn" onclick="filterAssets('synthetic')" data-filter="synthetic" style="border-color: #7b2cbf;">&#9889; Synthetic</button>
-            <button class="tf-btn" onclick="filterAssets('futures')" data-filter="futures" style="border-color: #ffc800;">&#128200; Futures &amp; S&amp;P</button>
+            <button class="filter-btn" onclick="filterAssets('forex')" data-filter="forex" style="border-color: #3b9eff;">&#128177; Forex</button>
+            <button class="filter-btn" onclick="filterAssets('synthetic')" data-filter="synthetic" style="border-color: #7b2cbf;">&#9889; Synthetic</button>
+            <button class="filter-btn" onclick="filterAssets('futures')" data-filter="futures" style="border-color: #ffc800;">&#128200; Futures &amp; S&amp;P</button>
             <span style="color: var(--text-secondary); font-size: 13px; margin-left: 10px;">|</span>
-            <button class="tf-btn" onclick="filterAssets('jump')" data-filter="jump">Jump</button>
-            <button class="tf-btn" onclick="filterAssets('volatility')" data-filter="volatility">Volatility</button>
-            <button class="tf-btn" onclick="filterAssets('boom-crash')" data-filter="boom-crash">Boom/Crash</button>
+            <button class="filter-btn" onclick="filterAssets('jump')" data-filter="jump">Jump</button>
+            <button class="filter-btn" onclick="filterAssets('volatility')" data-filter="volatility">Volatility</button>
+            <button class="filter-btn" onclick="filterAssets('boom-crash')" data-filter="boom-crash">Boom/Crash</button>
         </div>
 
         <div class="last-updated" id="last-updated">Fetching live data...</div>
@@ -2018,8 +2036,8 @@
 
         function filterAssets(filter) {
             // Update active filter button
-            document.querySelectorAll('[data-filter]').forEach(btn => btn.classList.remove('active'));
-            const activeBtn = document.querySelector(`[data-filter="${filter}"]`);
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`.filter-btn[data-filter="${filter}"]`);
             if (activeBtn) activeBtn.classList.add('active');
 
             if (!allResults.length) return;
@@ -2406,10 +2424,10 @@
         // ============================================
         // EVENT HANDLERS
         // ============================================
-        // Timeframe buttons (main page)
-        document.querySelectorAll('.tf-btn').forEach(btn => {
+        // Timeframe buttons (main page) - only target buttons with data-tf
+        document.querySelectorAll('.tf-btn[data-tf]').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tf-btn[data-tf]').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentTimeframe = parseInt(btn.dataset.tf);
                 if (isConnected) {
