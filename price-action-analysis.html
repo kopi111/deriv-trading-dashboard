@@ -1081,7 +1081,11 @@
             <button class="tf-btn" onclick="filterAssets('sell')" data-filter="sell">Sell</button>
             <button class="tf-btn" onclick="filterAssets('strong-sell')" data-filter="strong-sell">Strong Sell</button>
             <span style="color: var(--text-secondary); font-size: 13px; margin-left: 10px;">|</span>
-            <button class="tf-btn" onclick="filterAssets('jump')" data-filter="jump">Jump Indices</button>
+            <button class="tf-btn" onclick="filterAssets('forex')" data-filter="forex" style="border-color: #3b9eff;">&#128177; Forex</button>
+            <button class="tf-btn" onclick="filterAssets('synthetic')" data-filter="synthetic" style="border-color: #7b2cbf;">&#9889; Synthetic</button>
+            <button class="tf-btn" onclick="filterAssets('futures')" data-filter="futures" style="border-color: #ffc800;">&#128200; Futures &amp; S&amp;P</button>
+            <span style="color: var(--text-secondary); font-size: 13px; margin-left: 10px;">|</span>
+            <button class="tf-btn" onclick="filterAssets('jump')" data-filter="jump">Jump</button>
             <button class="tf-btn" onclick="filterAssets('volatility')" data-filter="volatility">Volatility</button>
             <button class="tf-btn" onclick="filterAssets('boom-crash')" data-filter="boom-crash">Boom/Crash</button>
         </div>
@@ -1239,22 +1243,47 @@
         const DERIV_WS_URL = 'wss://ws.derivws.com/websockets/v3?app_id=1089';
 
         const assets = [
-            { symbol: 'R_10', name: 'Volatility 10 Index' },
-            { symbol: 'R_25', name: 'Volatility 25 Index' },
-            { symbol: 'R_50', name: 'Volatility 50 Index' },
-            { symbol: 'R_75', name: 'Volatility 75 Index' },
-            { symbol: 'R_100', name: 'Volatility 100 Index' },
-            { symbol: '1HZ31V', name: 'Volatility 31 (1s)' },
-            { symbol: '1HZ75V', name: 'Volatility 75 (1s)' },
-            { symbol: 'BOOM500', name: 'Boom 500 Index' },
-            { symbol: 'CRASH500', name: 'Crash 500 Index' },
-            { symbol: 'stpRNG', name: 'Step Index' },
-            { symbol: 'JD10', name: 'Jump 10 Index' },
-            { symbol: 'JD25', name: 'Jump 25 Index' },
-            { symbol: 'JD50', name: 'Jump 50 Index' },
-            { symbol: 'JD75', name: 'Jump 75 Index' },
-            { symbol: 'JD100', name: 'Jump 100 Index' }
+            // Forex Major Pairs
+            { symbol: 'frxEURUSD', name: 'EUR/USD', category: 'forex' },
+            { symbol: 'frxGBPUSD', name: 'GBP/USD', category: 'forex' },
+            { symbol: 'frxUSDJPY', name: 'USD/JPY', category: 'forex' },
+            { symbol: 'frxUSDCHF', name: 'USD/CHF', category: 'forex' },
+            { symbol: 'frxAUDUSD', name: 'AUD/USD', category: 'forex' },
+            // Synthetic - Volatility
+            { symbol: 'R_10', name: 'Volatility 10 Index', category: 'synthetic' },
+            { symbol: 'R_25', name: 'Volatility 25 Index', category: 'synthetic' },
+            { symbol: 'R_50', name: 'Volatility 50 Index', category: 'synthetic' },
+            { symbol: 'R_75', name: 'Volatility 75 Index', category: 'synthetic' },
+            { symbol: 'R_100', name: 'Volatility 100 Index', category: 'synthetic' },
+            { symbol: '1HZ31V', name: 'Volatility 31 (1s)', category: 'synthetic' },
+            { symbol: '1HZ75V', name: 'Volatility 75 (1s)', category: 'synthetic' },
+            // Synthetic - Boom/Crash
+            { symbol: 'BOOM500', name: 'Boom 500 Index', category: 'synthetic' },
+            { symbol: 'CRASH500', name: 'Crash 500 Index', category: 'synthetic' },
+            // Synthetic - Step
+            { symbol: 'stpRNG', name: 'Step Index', category: 'synthetic' },
+            // Synthetic - Jump
+            { symbol: 'JD10', name: 'Jump 10 Index', category: 'synthetic' },
+            { symbol: 'JD25', name: 'Jump 25 Index', category: 'synthetic' },
+            { symbol: 'JD50', name: 'Jump 50 Index', category: 'synthetic' },
+            { symbol: 'JD75', name: 'Jump 75 Index', category: 'synthetic' },
+            { symbol: 'JD100', name: 'Jump 100 Index', category: 'synthetic' },
+            // Futures
+            { symbol: 'frxXAUUSD', name: 'Gold (XAU/USD)', category: 'futures' },
+            { symbol: 'OTC_SP500', name: 'S&P 500', category: 'futures' },
+            { symbol: 'OTC_GDAXI', name: 'DAX 30', category: 'futures' },
+            { symbol: 'OTC_NDX', name: 'US Tech 100', category: 'futures' }
         ];
+
+        // Price formatting based on symbol type
+        function formatPrice(symbol, price) {
+            if (!price && price !== 0) return '--';
+            if (symbol.startsWith('frx')) {
+                // Forex: 5 decimals, except JPY pairs use 3
+                return symbol.includes('JPY') ? price.toFixed(3) : price.toFixed(5);
+            }
+            return price.toFixed(2);
+        }
 
         let ws = null;
         let isConnected = false;
@@ -1835,15 +1864,28 @@
             const actionable = results.filter(a => a.bias !== 'neutral');
             const bestSymbol = actionable.length > 0 ? actionable.sort((x, y) => y.confidence - x.confidence)[0].symbol : null;
 
+            // Category badge colors
+            const catBadge = (sym) => {
+                const asset = assets.find(x => x.symbol === sym);
+                const cat = asset ? asset.category : 'synthetic';
+                const styles = {
+                    forex: 'background: rgba(59,158,255,0.2); color: #3b9eff; border: 1px solid rgba(59,158,255,0.4);',
+                    synthetic: 'background: rgba(123,44,191,0.2); color: #b366ff; border: 1px solid rgba(123,44,191,0.4);',
+                    futures: 'background: rgba(255,200,0,0.2); color: #ffc800; border: 1px solid rgba(255,200,0,0.4);'
+                };
+                const labels = { forex: 'FOREX', synthetic: 'SYNTHETIC', futures: 'FUTURES' };
+                return `<span style="${styles[cat] || styles.synthetic} padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px;">${labels[cat] || 'SYNTHETIC'}</span>`;
+            };
+
             grid.innerHTML = results.map(a => `
                 <div class="asset-card${a.symbol === bestSymbol ? ' best-trade' : ''}" onclick="openChartModal('${a.symbol}')" style="${a.symbol === bestSymbol ? 'border: 2px solid #00ff88; box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);' : ''}">
                     ${a.symbol === bestSymbol ? '<div style="background: linear-gradient(135deg, #00ff88, #00cc66); color: #000; text-align: center; padding: 6px; font-weight: 700; font-size: 13px; border-radius: 8px 8px 0 0; margin: -20px -20px 15px -20px;">&#9733; BEST TRADE &#9733;</div>' : ''}
                     <div class="asset-header">
                         <div>
-                            <div class="asset-name">${a.name}</div>
+                            <div class="asset-name">${a.name} ${catBadge(a.symbol)}</div>
                             <div class="asset-symbol">${a.symbol}</div>
                             <div class="asset-price ${a.change >= 0 ? 'price-up' : 'price-down'}">
-                                ${a.currentPrice.toFixed(2)}
+                                ${formatPrice(a.symbol, a.currentPrice)}
                                 <span class="price-change ${a.change >= 0 ? 'change-positive' : 'change-negative'}">
                                     ${a.change >= 0 ? '+' : ''}${a.change.toFixed(2)}%
                                 </span>
@@ -1869,16 +1911,16 @@
                         <div class="levels-grid">
                             <div class="level-item entry">
                                 <div class="level-label">Entry</div>
-                                <div class="level-value">${a.entry.toFixed(2)}</div>
+                                <div class="level-value">${formatPrice(a.symbol, a.entry)}</div>
                             </div>
                             <div class="level-item sl">
                                 <div class="level-label">Stop Loss</div>
-                                <div class="level-value">${a.sl.toFixed(2)}</div>
+                                <div class="level-value">${formatPrice(a.symbol, a.sl)}</div>
                                 <div class="level-pips">${a.slPips.toFixed(2)} pips</div>
                             </div>
                             <div class="level-item tp">
                                 <div class="level-label">Take Profit</div>
-                                <div class="level-value">${a.tp.toFixed(2)}</div>
+                                <div class="level-value">${formatPrice(a.symbol, a.tp)}</div>
                                 <div class="level-pips">${a.tpPips.toFixed(2)} pips</div>
                             </div>
                         </div>
@@ -1984,15 +2026,17 @@
 
             let filtered = [...allResults];
 
+            // Look up category from assets array
+            const assetMap = {};
+            assets.forEach(a => { assetMap[a.symbol] = a; });
+
             if (filter === 'best') {
-                // Show only the single highest confidence non-neutral trade
                 const actionable = filtered.filter(a => a.bias !== 'neutral');
                 if (actionable.length > 0) {
-                    // Sort by confidence, then by absolute distance from neutral
                     actionable.sort((a, b) => b.confidence - a.confidence);
                     filtered = [actionable[0]];
                 } else {
-                    filtered = [filtered[0]]; // fallback to highest confidence
+                    filtered = [filtered[0]];
                 }
             } else if (filter === 'strong-buy') {
                 filtered = filtered.filter(a => a.bias === 'strong-buy');
@@ -2002,6 +2046,12 @@
                 filtered = filtered.filter(a => a.bias === 'sell' || a.bias === 'strong-sell');
             } else if (filter === 'strong-sell') {
                 filtered = filtered.filter(a => a.bias === 'strong-sell');
+            } else if (filter === 'forex') {
+                filtered = filtered.filter(a => assetMap[a.symbol] && assetMap[a.symbol].category === 'forex');
+            } else if (filter === 'synthetic') {
+                filtered = filtered.filter(a => assetMap[a.symbol] && assetMap[a.symbol].category === 'synthetic');
+            } else if (filter === 'futures') {
+                filtered = filtered.filter(a => assetMap[a.symbol] && assetMap[a.symbol].category === 'futures');
             } else if (filter === 'jump') {
                 filtered = filtered.filter(a => a.symbol.startsWith('JD'));
             } else if (filter === 'volatility') {
