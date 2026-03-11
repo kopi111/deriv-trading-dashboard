@@ -1071,6 +1071,21 @@
             <button class="tf-btn" data-tf="86400">1D</button>
         </div>
 
+        <!-- Filter Bar -->
+        <div class="timeframe-selector" style="margin-top: 10px; gap: 8px; flex-wrap: wrap;">
+            <span style="color: var(--text-secondary); font-size: 13px; margin-right: 5px;">Filter:</span>
+            <button class="tf-btn active" onclick="filterAssets('all')" data-filter="all">All</button>
+            <button class="tf-btn" onclick="filterAssets('best')" data-filter="best" style="background: linear-gradient(135deg, #00ff88, #00cc66); color: #000; font-weight: 700;">&#9733; Best Trade</button>
+            <button class="tf-btn" onclick="filterAssets('strong-buy')" data-filter="strong-buy">Strong Buy</button>
+            <button class="tf-btn" onclick="filterAssets('buy')" data-filter="buy">Buy</button>
+            <button class="tf-btn" onclick="filterAssets('sell')" data-filter="sell">Sell</button>
+            <button class="tf-btn" onclick="filterAssets('strong-sell')" data-filter="strong-sell">Strong Sell</button>
+            <span style="color: var(--text-secondary); font-size: 13px; margin-left: 10px;">|</span>
+            <button class="tf-btn" onclick="filterAssets('jump')" data-filter="jump">Jump Indices</button>
+            <button class="tf-btn" onclick="filterAssets('volatility')" data-filter="volatility">Volatility</button>
+            <button class="tf-btn" onclick="filterAssets('boom-crash')" data-filter="boom-crash">Boom/Crash</button>
+        </div>
+
         <div class="last-updated" id="last-updated">Fetching live data...</div>
 
         <!-- Summary Section -->
@@ -1234,7 +1249,11 @@
             { symbol: 'BOOM500', name: 'Boom 500 Index' },
             { symbol: 'CRASH500', name: 'Crash 500 Index' },
             { symbol: 'stpRNG', name: 'Step Index' },
-            { symbol: 'JD75', name: 'Jump 75 Index' }
+            { symbol: 'JD10', name: 'Jump 10 Index' },
+            { symbol: 'JD25', name: 'Jump 25 Index' },
+            { symbol: 'JD50', name: 'Jump 50 Index' },
+            { symbol: 'JD75', name: 'Jump 75 Index' },
+            { symbol: 'JD100', name: 'Jump 100 Index' }
         ];
 
         let ws = null;
@@ -1403,6 +1422,7 @@
             // Show cached data immediately
             const cachedData = loadFromCache();
             if (cachedData && cachedData.results && cachedData.results.length > 0) {
+                allResults = cachedData.results;
                 renderAssetCards(cachedData.results);
                 renderSummary(cachedData.results);
                 analysisResults = cachedData.analysisResults || {};
@@ -1433,6 +1453,7 @@
             results.sort((a, b) => b.confidence - a.confidence);
 
             if (results.length > 0) {
+                allResults = results;
                 renderAssetCards(results);
                 renderSummary(results);
                 saveToCache({ results, analysisResults, candleDataCache });
@@ -1810,8 +1831,13 @@
                 return;
             }
 
+            // Find best actionable trade
+            const actionable = results.filter(a => a.bias !== 'neutral');
+            const bestSymbol = actionable.length > 0 ? actionable.sort((x, y) => y.confidence - x.confidence)[0].symbol : null;
+
             grid.innerHTML = results.map(a => `
-                <div class="asset-card" onclick="openChartModal('${a.symbol}')">
+                <div class="asset-card${a.symbol === bestSymbol ? ' best-trade' : ''}" onclick="openChartModal('${a.symbol}')" style="${a.symbol === bestSymbol ? 'border: 2px solid #00ff88; box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);' : ''}">
+                    ${a.symbol === bestSymbol ? '<div style="background: linear-gradient(135deg, #00ff88, #00cc66); color: #000; text-align: center; padding: 6px; font-weight: 700; font-size: 13px; border-radius: 8px 8px 0 0; margin: -20px -20px 15px -20px;">&#9733; BEST TRADE &#9733;</div>' : ''}
                     <div class="asset-header">
                         <div>
                             <div class="asset-name">${a.name}</div>
@@ -1943,6 +1969,53 @@
                     `).join('') : '<div class="summary-item"><span style="color: var(--text-secondary); font-style: italic;">None</span></div>'}
                 </div>
             `;
+        }
+
+        // Store all results for filtering
+        let allResults = [];
+
+        function filterAssets(filter) {
+            // Update active filter button
+            document.querySelectorAll('[data-filter]').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`[data-filter="${filter}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            if (!allResults.length) return;
+
+            let filtered = [...allResults];
+
+            if (filter === 'best') {
+                // Show only the single highest confidence non-neutral trade
+                const actionable = filtered.filter(a => a.bias !== 'neutral');
+                if (actionable.length > 0) {
+                    // Sort by confidence, then by absolute distance from neutral
+                    actionable.sort((a, b) => b.confidence - a.confidence);
+                    filtered = [actionable[0]];
+                } else {
+                    filtered = [filtered[0]]; // fallback to highest confidence
+                }
+            } else if (filter === 'strong-buy') {
+                filtered = filtered.filter(a => a.bias === 'strong-buy');
+            } else if (filter === 'buy') {
+                filtered = filtered.filter(a => a.bias === 'buy' || a.bias === 'strong-buy');
+            } else if (filter === 'sell') {
+                filtered = filtered.filter(a => a.bias === 'sell' || a.bias === 'strong-sell');
+            } else if (filter === 'strong-sell') {
+                filtered = filtered.filter(a => a.bias === 'strong-sell');
+            } else if (filter === 'jump') {
+                filtered = filtered.filter(a => a.symbol.startsWith('JD'));
+            } else if (filter === 'volatility') {
+                filtered = filtered.filter(a => a.symbol.startsWith('R_') || a.symbol.includes('HZ') || a.symbol === 'stpRNG');
+            } else if (filter === 'boom-crash') {
+                filtered = filtered.filter(a => a.symbol.includes('BOOM') || a.symbol.includes('CRASH'));
+            }
+
+            if (filtered.length === 0) {
+                document.getElementById('assets-grid').innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">No signals match this filter.</div>';
+                return;
+            }
+
+            renderAssetCards(filtered);
         }
 
         function updateTimestamp() {
