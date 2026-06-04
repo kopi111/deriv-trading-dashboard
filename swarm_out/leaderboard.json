@@ -1,0 +1,799 @@
+[
+  {
+    "symbol": "CL=F",
+    "label": "Crude Oil (WTI)",
+    "source": "yahoo",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 5,
+      "oversold": 30,
+      "overbought": 65,
+      "sl": 2.0,
+      "tp": 0.5
+    },
+    "params_summary": "RSI 5 (30/65)",
+    "cost_pct": 0.02,
+    "in_sample": {
+      "trades": 165,
+      "win_rate": 85.5,
+      "total_return_pct": 127.0,
+      "profit_factor": 1.86,
+      "expectancy_pct": 0.77,
+      "max_drawdown_pct": 15.28,
+      "sharpe": 3.25
+    },
+    "holdout": {
+      "trades": 50,
+      "win_rate": 88.0,
+      "total_return_pct": 59.4,
+      "profit_factor": 2.82,
+      "expectancy_pct": 1.187,
+      "max_drawdown_pct": 13.29,
+      "sharpe": 3.07
+    },
+    "walk_forward": {
+      "trades": 132,
+      "win_rate": 85.6,
+      "total_return_pct": 99.2,
+      "profit_factor": 1.86,
+      "expectancy_pct": 0.752,
+      "max_drawdown_pct": 18.8,
+      "sharpe": 2.87
+    },
+    "survives": true,
+    "reasons": []
+  },
+  {
+    "symbol": "R_75",
+    "label": "Volatility 75 Index",
+    "source": "deriv",
+    "strategy": "EMA",
+    "params": {
+      "strategy": "EMA",
+      "fast": 5,
+      "slow": 21,
+      "sl": 3.0,
+      "tp": 1.5
+    },
+    "params_summary": "EMA 5/21",
+    "cost_pct": 0.05,
+    "in_sample": {
+      "trades": 247,
+      "win_rate": 75.7,
+      "total_return_pct": 112.2,
+      "profit_factor": 1.48,
+      "expectancy_pct": 0.454,
+      "max_drawdown_pct": 14.33,
+      "sharpe": 2.9
+    },
+    "holdout": {
+      "trades": 75,
+      "win_rate": 76.0,
+      "total_return_pct": 36.8,
+      "profit_factor": 1.53,
+      "expectancy_pct": 0.491,
+      "max_drawdown_pct": 11.57,
+      "sharpe": 1.75
+    },
+    "walk_forward": {
+      "trades": 400,
+      "win_rate": 83.0,
+      "total_return_pct": 53.9,
+      "profit_factor": 1.24,
+      "expectancy_pct": 0.135,
+      "max_drawdown_pct": 28.69,
+      "sharpe": 1.66
+    },
+    "survives": true,
+    "reasons": []
+  },
+  {
+    "symbol": "GC=F",
+    "label": "Gold (XAU/USD)",
+    "source": "yahoo",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 9,
+      "oversold": 30,
+      "overbought": 65,
+      "sl": 2.0,
+      "tp": 1.0
+    },
+    "params_summary": "RSI 9 (30/65)",
+    "cost_pct": 0.02,
+    "in_sample": {
+      "trades": 100,
+      "win_rate": 75.0,
+      "total_return_pct": 35.1,
+      "profit_factor": 1.55,
+      "expectancy_pct": 0.351,
+      "max_drawdown_pct": 8.93,
+      "sharpe": 1.93
+    },
+    "holdout": {
+      "trades": 27,
+      "win_rate": 55.6,
+      "total_return_pct": 4.0,
+      "profit_factor": 1.13,
+      "expectancy_pct": 0.146,
+      "max_drawdown_pct": 11.98,
+      "sharpe": 0.3
+    },
+    "walk_forward": {
+      "trades": 86,
+      "win_rate": 66.3,
+      "total_return_pct": 12.3,
+      "profit_factor": 1.19,
+      "expectancy_pct": 0.143,
+      "max_drawdown_pct": 11.61,
+      "sharpe": 0.7
+    },
+    "survives": true,
+    "reasons": []
+  },
+  {
+    "symbol": "ETH-USD",
+    "label": "Ethereum (ETH/USD)",
+    "source": "yahoo",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 14,
+      "oversold": 30,
+      "overbought": 65,
+      "sl": 2.0,
+      "tp": 2.0
+    },
+    "params_summary": "RSI 14 (30/65)",
+    "cost_pct": 0.2,
+    "in_sample": {
+      "trades": 80,
+      "win_rate": 61.3,
+      "total_return_pct": 151.5,
+      "profit_factor": 1.42,
+      "expectancy_pct": 1.893,
+      "max_drawdown_pct": 88.23,
+      "sharpe": 1.46
+    },
+    "holdout": {
+      "trades": 21,
+      "win_rate": 61.9,
+      "total_return_pct": 20.0,
+      "profit_factor": 1.18,
+      "expectancy_pct": 0.954,
+      "max_drawdown_pct": 55.22,
+      "sharpe": 0.35
+    },
+    "walk_forward": {
+      "trades": 76,
+      "win_rate": 67.1,
+      "total_return_pct": 25.0,
+      "profit_factor": 1.09,
+      "expectancy_pct": 0.329,
+      "max_drawdown_pct": 81.21,
+      "sharpe": 0.3
+    },
+    "survives": true,
+    "reasons": []
+  },
+  {
+    "symbol": "1HZ100V",
+    "label": "Volatility 100 (1s) Index",
+    "source": "deriv",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 5,
+      "oversold": 25,
+      "overbought": 75,
+      "sl": 2.0,
+      "tp": 2.0
+    },
+    "params_summary": "RSI 5 (25/75)",
+    "cost_pct": 0.05,
+    "in_sample": {
+      "trades": 574,
+      "win_rate": 54.7,
+      "total_return_pct": 156.0,
+      "profit_factor": 1.17,
+      "expectancy_pct": 0.272,
+      "max_drawdown_pct": 52.04,
+      "sharpe": 1.91
+    },
+    "holdout": {
+      "trades": 114,
+      "win_rate": 65.8,
+      "total_return_pct": -16.8,
+      "profit_factor": 0.92,
+      "expectancy_pct": -0.148,
+      "max_drawdown_pct": 37.62,
+      "sharpe": -0.43
+    },
+    "walk_forward": {
+      "trades": 330,
+      "win_rate": 70.3,
+      "total_return_pct": 30.0,
+      "profit_factor": 1.06,
+      "expectancy_pct": 0.091,
+      "max_drawdown_pct": 48.79,
+      "sharpe": 0.52
+    },
+    "survives": false,
+    "reasons": [
+      "holdout PF 0.92 < 1",
+      "holdout return <= 0"
+    ]
+  },
+  {
+    "symbol": "R_100",
+    "label": "Volatility 100 Index",
+    "source": "deriv",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 9,
+      "oversold": 25,
+      "overbought": 70,
+      "sl": 3.0,
+      "tp": 2.0
+    },
+    "params_summary": "RSI 9 (25/70)",
+    "cost_pct": 0.05,
+    "in_sample": {
+      "trades": 392,
+      "win_rate": 66.6,
+      "total_return_pct": 196.3,
+      "profit_factor": 1.29,
+      "expectancy_pct": 0.501,
+      "max_drawdown_pct": 59.09,
+      "sharpe": 2.46
+    },
+    "holdout": {
+      "trades": 63,
+      "win_rate": 49.2,
+      "total_return_pct": -88.6,
+      "profit_factor": 0.46,
+      "expectancy_pct": -1.406,
+      "max_drawdown_pct": 108.12,
+      "sharpe": -2.92
+    },
+    "walk_forward": {
+      "trades": 352,
+      "win_rate": 83.2,
+      "total_return_pct": -19.3,
+      "profit_factor": 0.93,
+      "expectancy_pct": -0.055,
+      "max_drawdown_pct": 49.99,
+      "sharpe": -0.47
+    },
+    "survives": false,
+    "reasons": [
+      "holdout PF 0.46 < 1",
+      "holdout return <= 0",
+      "walk-forward PF 0.93 < 1"
+    ]
+  },
+  {
+    "symbol": "R_50",
+    "label": "Volatility 50 Index",
+    "source": "deriv",
+    "strategy": "MACD",
+    "params": {
+      "strategy": "MACD",
+      "sl": 3.0,
+      "tp": 2.0
+    },
+    "params_summary": "MACD",
+    "cost_pct": 0.05,
+    "in_sample": {
+      "trades": 299,
+      "win_rate": 65.6,
+      "total_return_pct": 57.0,
+      "profit_factor": 1.22,
+      "expectancy_pct": 0.19,
+      "max_drawdown_pct": 29.58,
+      "sharpe": 1.65
+    },
+    "holdout": {
+      "trades": 89,
+      "win_rate": 60.7,
+      "total_return_pct": -2.3,
+      "profit_factor": 0.97,
+      "expectancy_pct": -0.026,
+      "max_drawdown_pct": 18.26,
+      "sharpe": -0.12
+    },
+    "walk_forward": {
+      "trades": 249,
+      "win_rate": 67.5,
+      "total_return_pct": -13.6,
+      "profit_factor": 0.92,
+      "expectancy_pct": -0.055,
+      "max_drawdown_pct": 41.49,
+      "sharpe": -0.55
+    },
+    "survives": false,
+    "reasons": [
+      "holdout PF 0.97 < 1",
+      "holdout return <= 0",
+      "walk-forward PF 0.92 < 1"
+    ]
+  },
+  {
+    "symbol": "1HZ75V",
+    "label": "Volatility 75 (1s) Index",
+    "source": "deriv",
+    "strategy": "EMA",
+    "params": {
+      "strategy": "EMA",
+      "fast": 5,
+      "slow": 21,
+      "sl": 2.0,
+      "tp": 0.5
+    },
+    "params_summary": "EMA 5/21",
+    "cost_pct": 0.05,
+    "in_sample": {
+      "trades": 390,
+      "win_rate": 83.1,
+      "total_return_pct": 19.3,
+      "profit_factor": 1.11,
+      "expectancy_pct": 0.05,
+      "max_drawdown_pct": 17.21,
+      "sharpe": 0.82
+    },
+    "holdout": {
+      "trades": 169,
+      "win_rate": 75.1,
+      "total_return_pct": -8.9,
+      "profit_factor": 0.95,
+      "expectancy_pct": -0.053,
+      "max_drawdown_pct": 25.81,
+      "sharpe": -0.31
+    },
+    "walk_forward": {
+      "trades": 375,
+      "win_rate": 75.2,
+      "total_return_pct": -37.1,
+      "profit_factor": 0.89,
+      "expectancy_pct": -0.099,
+      "max_drawdown_pct": 43.82,
+      "sharpe": -0.95
+    },
+    "survives": false,
+    "reasons": [
+      "holdout PF 0.95 < 1",
+      "holdout return <= 0",
+      "walk-forward PF 0.89 < 1"
+    ]
+  },
+  {
+    "symbol": "^GSPC",
+    "label": "S&P 500",
+    "source": "yahoo",
+    "strategy": "MACD",
+    "params": {
+      "strategy": "MACD",
+      "sl": 2.0,
+      "tp": 1.0
+    },
+    "params_summary": "MACD",
+    "cost_pct": 0.02,
+    "in_sample": {
+      "trades": 82,
+      "win_rate": 72.0,
+      "total_return_pct": 22.7,
+      "profit_factor": 1.42,
+      "expectancy_pct": 0.276,
+      "max_drawdown_pct": 8.06,
+      "sharpe": 1.39
+    },
+    "holdout": {
+      "trades": 42,
+      "win_rate": 64.3,
+      "total_return_pct": -6.8,
+      "profit_factor": 0.83,
+      "expectancy_pct": -0.161,
+      "max_drawdown_pct": 11.01,
+      "sharpe": -0.55
+    },
+    "walk_forward": {
+      "trades": 70,
+      "win_rate": 67.1,
+      "total_return_pct": -7.8,
+      "profit_factor": 0.88,
+      "expectancy_pct": -0.111,
+      "max_drawdown_pct": 18.22,
+      "sharpe": -0.46
+    },
+    "survives": false,
+    "reasons": [
+      "holdout PF 0.83 < 1",
+      "holdout return <= 0",
+      "walk-forward PF 0.88 < 1"
+    ]
+  },
+  {
+    "symbol": "EURUSD=X",
+    "label": "EUR/USD",
+    "source": "yahoo",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 14,
+      "oversold": 25,
+      "overbought": 75,
+      "sl": 3.0,
+      "tp": 0.5
+    },
+    "params_summary": "RSI 14 (25/75)",
+    "cost_pct": 0.012,
+    "in_sample": {
+      "trades": 51,
+      "win_rate": 94.1,
+      "total_return_pct": 12.2,
+      "profit_factor": 2.93,
+      "expectancy_pct": 0.24,
+      "max_drawdown_pct": 5.13,
+      "sharpe": 2.76
+    },
+    "holdout": {
+      "trades": 21,
+      "win_rate": 85.7,
+      "total_return_pct": -0.8,
+      "profit_factor": 0.89,
+      "expectancy_pct": -0.04,
+      "max_drawdown_pct": 4.04,
+      "sharpe": -0.18
+    },
+    "walk_forward": {
+      "trades": 68,
+      "win_rate": 82.4,
+      "total_return_pct": -3.9,
+      "profit_factor": 0.86,
+      "expectancy_pct": -0.058,
+      "max_drawdown_pct": 9.88,
+      "sharpe": -0.44
+    },
+    "survives": false,
+    "reasons": [
+      "holdout PF 0.89 < 1",
+      "holdout return <= 0",
+      "walk-forward PF 0.86 < 1"
+    ]
+  },
+  {
+    "symbol": "USDJPY=X",
+    "label": "USD/JPY",
+    "source": "yahoo",
+    "strategy": "EMA",
+    "params": {
+      "strategy": "EMA",
+      "fast": 5,
+      "slow": 21,
+      "sl": 2.0,
+      "tp": 1.0
+    },
+    "params_summary": "EMA 5/21",
+    "cost_pct": 0.015,
+    "in_sample": {
+      "trades": 44,
+      "win_rate": 77.3,
+      "total_return_pct": 19.5,
+      "profit_factor": 2.17,
+      "expectancy_pct": 0.443,
+      "max_drawdown_pct": 4.79,
+      "sharpe": 2.49
+    },
+    "holdout": {
+      "trades": 17,
+      "win_rate": 70.6,
+      "total_return_pct": 2.7,
+      "profit_factor": 1.28,
+      "expectancy_pct": 0.16,
+      "max_drawdown_pct": 4.26,
+      "sharpe": 0.48
+    },
+    "walk_forward": {
+      "trades": 78,
+      "win_rate": 70.5,
+      "total_return_pct": -6.3,
+      "profit_factor": 0.86,
+      "expectancy_pct": -0.081,
+      "max_drawdown_pct": 13.49,
+      "sharpe": -0.56
+    },
+    "survives": false,
+    "reasons": [
+      "walk-forward PF 0.86 < 1"
+    ]
+  },
+  {
+    "symbol": "R_25",
+    "label": "Volatility 25 Index",
+    "source": "deriv",
+    "strategy": "EMA",
+    "params": {
+      "strategy": "EMA",
+      "fast": 9,
+      "slow": 21,
+      "sl": 3.0,
+      "tp": 2.5
+    },
+    "params_summary": "EMA 9/21",
+    "cost_pct": 0.05,
+    "in_sample": {
+      "trades": 177,
+      "win_rate": 62.1,
+      "total_return_pct": 20.8,
+      "profit_factor": 1.24,
+      "expectancy_pct": 0.118,
+      "max_drawdown_pct": 14.18,
+      "sharpe": 1.39
+    },
+    "holdout": {
+      "trades": 69,
+      "win_rate": 68.1,
+      "total_return_pct": -1.8,
+      "profit_factor": 0.94,
+      "expectancy_pct": -0.026,
+      "max_drawdown_pct": 7.69,
+      "sharpe": -0.24
+    },
+    "walk_forward": {
+      "trades": 285,
+      "win_rate": 62.5,
+      "total_return_pct": -15.7,
+      "profit_factor": 0.85,
+      "expectancy_pct": -0.055,
+      "max_drawdown_pct": 18.81,
+      "sharpe": -1.23
+    },
+    "survives": false,
+    "reasons": [
+      "holdout PF 0.94 < 1",
+      "holdout return <= 0",
+      "walk-forward PF 0.85 < 1"
+    ]
+  },
+  {
+    "symbol": "R_10",
+    "label": "Volatility 10 Index",
+    "source": "deriv",
+    "strategy": "EMA",
+    "params": {
+      "strategy": "EMA",
+      "fast": 9,
+      "slow": 50,
+      "sl": 2.0,
+      "tp": 1.5
+    },
+    "params_summary": "EMA 9/50",
+    "cost_pct": 0.05,
+    "in_sample": {
+      "trades": 179,
+      "win_rate": 68.2,
+      "total_return_pct": 3.2,
+      "profit_factor": 1.15,
+      "expectancy_pct": 0.018,
+      "max_drawdown_pct": 3.38,
+      "sharpe": 0.88
+    },
+    "holdout": {
+      "trades": 54,
+      "win_rate": 44.4,
+      "total_return_pct": -2.9,
+      "profit_factor": 0.75,
+      "expectancy_pct": -0.055,
+      "max_drawdown_pct": 3.39,
+      "sharpe": -1.06
+    },
+    "walk_forward": {
+      "trades": 163,
+      "win_rate": 55.8,
+      "total_return_pct": -4.9,
+      "profit_factor": 0.83,
+      "expectancy_pct": -0.03,
+      "max_drawdown_pct": 7.1,
+      "sharpe": -1.09
+    },
+    "survives": false,
+    "reasons": [
+      "holdout PF 0.75 < 1",
+      "holdout return <= 0",
+      "walk-forward PF 0.83 < 1"
+    ]
+  },
+  {
+    "symbol": "BTC-USD",
+    "label": "Bitcoin (BTC/USD)",
+    "source": "yahoo",
+    "strategy": "EMA",
+    "params": {
+      "strategy": "EMA",
+      "fast": 9,
+      "slow": 21,
+      "sl": 3.0,
+      "tp": 1.5
+    },
+    "params_summary": "EMA 9/21",
+    "cost_pct": 0.15,
+    "in_sample": {
+      "trades": 48,
+      "win_rate": 79.2,
+      "total_return_pct": 111.3,
+      "profit_factor": 2.05,
+      "expectancy_pct": 2.318,
+      "max_drawdown_pct": 32.37,
+      "sharpe": 2.32
+    },
+    "holdout": {
+      "trades": 43,
+      "win_rate": 76.7,
+      "total_return_pct": -58.2,
+      "profit_factor": 0.46,
+      "expectancy_pct": -1.353,
+      "max_drawdown_pct": 63.84,
+      "sharpe": -1.64
+    },
+    "walk_forward": {
+      "trades": 85,
+      "win_rate": 72.9,
+      "total_return_pct": -38.1,
+      "profit_factor": 0.79,
+      "expectancy_pct": -0.448,
+      "max_drawdown_pct": 60.53,
+      "sharpe": -0.84
+    },
+    "survives": false,
+    "reasons": [
+      "holdout PF 0.46 < 1",
+      "holdout return <= 0",
+      "walk-forward PF 0.79 < 1"
+    ]
+  },
+  {
+    "symbol": "stpRNG",
+    "label": "Step Index",
+    "source": "deriv",
+    "strategy": "EMA",
+    "params": {
+      "strategy": "EMA",
+      "fast": 5,
+      "slow": 21,
+      "sl": 3.0,
+      "tp": 2.5
+    },
+    "params_summary": "EMA 5/21",
+    "cost_pct": 0.05,
+    "in_sample": {
+      "trades": 190,
+      "win_rate": 60.0,
+      "total_return_pct": -2.8,
+      "profit_factor": 0.91,
+      "expectancy_pct": -0.015,
+      "max_drawdown_pct": 5.12,
+      "sharpe": -0.64
+    },
+    "holdout": {
+      "trades": 56,
+      "win_rate": 60.7,
+      "total_return_pct": -0.5,
+      "profit_factor": 0.94,
+      "expectancy_pct": -0.01,
+      "max_drawdown_pct": 3.13,
+      "sharpe": -0.23
+    },
+    "walk_forward": {
+      "trades": 151,
+      "win_rate": 49.0,
+      "total_return_pct": -5.8,
+      "profit_factor": 0.76,
+      "expectancy_pct": -0.039,
+      "max_drawdown_pct": 9.58,
+      "sharpe": -1.68
+    },
+    "survives": false,
+    "reasons": [
+      "holdout PF 0.94 < 1",
+      "holdout return <= 0",
+      "walk-forward PF 0.76 < 1"
+    ]
+  },
+  {
+    "symbol": "GBPUSD=X",
+    "label": "GBP/USD",
+    "source": "yahoo",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 14,
+      "oversold": 20,
+      "overbought": 80,
+      "sl": 3.0,
+      "tp": 0.5
+    },
+    "params_summary": "RSI 14 (20/80)",
+    "cost_pct": 0.015,
+    "in_sample": {
+      "trades": 24,
+      "win_rate": 95.8,
+      "total_return_pct": 7.5,
+      "profit_factor": 4.86,
+      "expectancy_pct": 0.313,
+      "max_drawdown_pct": 1.95,
+      "sharpe": 3.05
+    },
+    "holdout": {
+      "trades": 18,
+      "win_rate": 61.1,
+      "total_return_pct": 3.2,
+      "profit_factor": 1.29,
+      "expectancy_pct": 0.18,
+      "max_drawdown_pct": 3.61,
+      "sharpe": 0.53
+    },
+    "walk_forward": {
+      "trades": 43,
+      "win_rate": 67.4,
+      "total_return_pct": -9.7,
+      "profit_factor": 0.72,
+      "expectancy_pct": -0.226,
+      "max_drawdown_pct": 16.81,
+      "sharpe": -0.79
+    },
+    "survives": false,
+    "reasons": [
+      "walk-forward PF 0.72 < 1"
+    ]
+  },
+  {
+    "symbol": "AUDUSD=X",
+    "label": "AUD/USD",
+    "source": "yahoo",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 5,
+      "oversold": 20,
+      "overbought": 80,
+      "sl": 2.0,
+      "tp": 1.0
+    },
+    "params_summary": "RSI 5 (20/80)",
+    "cost_pct": 0.015,
+    "in_sample": {
+      "trades": 109,
+      "win_rate": 72.5,
+      "total_return_pct": 13.4,
+      "profit_factor": 1.19,
+      "expectancy_pct": 0.123,
+      "max_drawdown_pct": 14.58,
+      "sharpe": 0.81
+    },
+    "holdout": {
+      "trades": 19,
+      "win_rate": 84.2,
+      "total_return_pct": 2.7,
+      "profit_factor": 1.48,
+      "expectancy_pct": 0.142,
+      "max_drawdown_pct": 3.24,
+      "sharpe": 0.69
+    },
+    "walk_forward": {
+      "trades": 64,
+      "win_rate": 67.2,
+      "total_return_pct": -23.7,
+      "profit_factor": 0.59,
+      "expectancy_pct": -0.37,
+      "max_drawdown_pct": 33.3,
+      "sharpe": -1.63
+    },
+    "survives": false,
+    "reasons": [
+      "walk-forward PF 0.59 < 1"
+    ]
+  }
+]

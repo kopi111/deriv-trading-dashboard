@@ -1,0 +1,161 @@
+{
+  "unit": "w06-metals",
+  "instruments": [
+    {
+      "symbol": "GC=F",
+      "label": "Gold (XAU/USD)",
+      "source": "yahoo",
+      "cost": 0.0002,
+      "candles": 1258,
+      "best": {
+        "params": {
+          "strategy": "RSI",
+          "period": 9,
+          "oversold": 30,
+          "overbought": 65,
+          "sl": 2.0,
+          "tp": 1.0
+        },
+        "result": {
+          "trades": 100,
+          "win_rate": 75.0,
+          "total_return_pct": 35.1,
+          "profit_factor": 1.55,
+          "expectancy_pct": 0.351,
+          "max_drawdown_pct": 8.93,
+          "sharpe": 1.93
+        },
+        "score": 61.48
+      },
+      "holdout": {
+        "params": {
+          "strategy": "RSI",
+          "period": 9,
+          "oversold": 30,
+          "overbought": 70,
+          "sl": 2.0,
+          "tp": 1.0
+        },
+        "in_sample": {
+          "trades": 68,
+          "win_rate": 79.4,
+          "total_return_pct": 25.1,
+          "profit_factor": 1.79,
+          "expectancy_pct": 0.37,
+          "max_drawdown_pct": 6.84,
+          "sharpe": 2.19
+        },
+        "out_of_sample": {
+          "trades": 27,
+          "win_rate": 55.6,
+          "total_return_pct": 4.0,
+          "profit_factor": 1.13,
+          "expectancy_pct": 0.146,
+          "max_drawdown_pct": 11.98,
+          "sharpe": 0.3
+        }
+      },
+      "walk_forward": {
+        "folds": 5,
+        "strategies_chosen": [
+          "RSI",
+          "RSI",
+          "RSI",
+          "RSI",
+          "RSI"
+        ],
+        "out_of_sample": {
+          "trades": 86,
+          "win_rate": 66.3,
+          "total_return_pct": 12.3,
+          "profit_factor": 1.19,
+          "expectancy_pct": 0.143,
+          "max_drawdown_pct": 11.61,
+          "sharpe": 0.7
+        }
+      },
+      "verdict": {
+        "survives": true,
+        "reasons": []
+      }
+    },
+    {
+      "symbol": "CL=F",
+      "label": "Crude Oil (WTI)",
+      "source": "yahoo",
+      "cost": 0.0002,
+      "candles": 1258,
+      "best": {
+        "params": {
+          "strategy": "RSI",
+          "period": 5,
+          "oversold": 30,
+          "overbought": 65,
+          "sl": 2.0,
+          "tp": 0.5
+        },
+        "result": {
+          "trades": 165,
+          "win_rate": 85.5,
+          "total_return_pct": 127.0,
+          "profit_factor": 1.86,
+          "expectancy_pct": 0.77,
+          "max_drawdown_pct": 15.28,
+          "sharpe": 3.25
+        },
+        "score": 118.61
+      },
+      "holdout": {
+        "params": {
+          "strategy": "RSI",
+          "period": 5,
+          "oversold": 30,
+          "overbought": 65,
+          "sl": 2.0,
+          "tp": 0.5
+        },
+        "in_sample": {
+          "trades": 115,
+          "win_rate": 84.3,
+          "total_return_pct": 66.7,
+          "profit_factor": 1.58,
+          "expectancy_pct": 0.58,
+          "max_drawdown_pct": 15.28,
+          "sharpe": 1.97
+        },
+        "out_of_sample": {
+          "trades": 50,
+          "win_rate": 88.0,
+          "total_return_pct": 59.4,
+          "profit_factor": 2.82,
+          "expectancy_pct": 1.187,
+          "max_drawdown_pct": 13.29,
+          "sharpe": 3.07
+        }
+      },
+      "walk_forward": {
+        "folds": 5,
+        "strategies_chosen": [
+          "RSI",
+          "RSI",
+          "RSI",
+          "RSI",
+          "RSI"
+        ],
+        "out_of_sample": {
+          "trades": 132,
+          "win_rate": 85.6,
+          "total_return_pct": 99.2,
+          "profit_factor": 1.86,
+          "expectancy_pct": 0.752,
+          "max_drawdown_pct": 18.8,
+          "sharpe": 2.87
+        }
+      },
+      "verdict": {
+        "survives": true,
+        "reasons": []
+      }
+    }
+  ]
+}

@@ -1,18 +1,85 @@
 ============================================================
    DERIV SYNTHETIC INDICES - BEST TRADING STRATEGIES
-   Backtested: 1 Year Hourly Data (8,731 candles each)
+   Backtested: Optimised Multi-Strategy Sweep
    Data Source: Deriv WebSocket API
-   Generated: 2026-02-22
+   Generated: 2026-06-04
 ============================================================
 
 
 ================================================================
-1. VOLATILITY 75 INDEX (R_75) - BEST OVERALL
+1. VOLATILITY 100 (1s) INDEX [1HZ100V] - HIGHEST RETURN / OVERALL BEST
+================================================================
+
+STRATEGY: RSI Mean Reversion (25/75)
+SYMBOL:   1HZ100V
+COMPOSITE SCORE: 237.89  <<<< #1 OF ALL 17 INSTRUMENTS
+
+ENTRY RULES:
+  BUY:  RSI(5) drops below 25, then crosses back ABOVE 25
+  SELL: RSI(5) rises above 75, then crosses back BELOW 75
+
+RISK MANAGEMENT:
+  Stop Loss:   2.0 x ATR(14)
+  Take Profit: 2.0 x ATR(14)
+
+  BUY:  SL = Entry - (ATR x 2.0)  |  TP = Entry + (ATR x 2.0)
+  SELL: SL = Entry + (ATR x 2.0)  |  TP = Entry - (ATR x 2.0)
+
+BACKTEST RESULTS:
+  Trades:        574
+  Win Rate:      54.7%
+  Total Return:  +470.6%  <<<< HIGHEST RETURN OF ALL
+  Profit Factor: 1.25
+  Expectancy:    +0.82% per trade
+  Max Drawdown:  82.53%   <<<< WARNING: VERY HIGH DRAWDOWN
+  Sharpe Ratio:  2.52
+
+WARNING: The extreme return comes at the cost of an 82.5% peak-to-trough
+drawdown. Use very small position sizes (0.5-1% risk per trade).
+
+
+================================================================
+2. VOLATILITY 100 INDEX (R_100) - BEST STANDARD VOLATILITY INDEX
+================================================================
+
+STRATEGY: RSI Mean Reversion (25/70)
+SYMBOL:   R_100
+COMPOSITE SCORE: 104.22  <<<< #3 OF ALL 17 INSTRUMENTS
+
+ENTRY RULES:
+  BUY:  RSI(9) drops below 25, then crosses back ABOVE 25
+  SELL: RSI(9) rises above 70, then crosses back BELOW 70
+
+RISK MANAGEMENT:
+  Stop Loss:   3.0 x ATR(14)
+  Take Profit: 2.0 x ATR(14)
+
+  BUY:  SL = Entry - (ATR x 3.0)  |  TP = Entry + (ATR x 2.0)
+  SELL: SL = Entry + (ATR x 3.0)  |  TP = Entry - (ATR x 2.0)
+
+BACKTEST RESULTS:
+  Trades:        392
+  Win Rate:      66.6%
+  Total Return:  +152.0%  <<<< BEST AMONG STANDARD V-INDICES
+  Profit Factor: 1.31
+  Expectancy:    +0.39% per trade
+  Max Drawdown:  34.35%
+  Sharpe Ratio:  2.53
+
+WHY IT WORKS:
+  - R_100 is highly mean-reverting at extremes
+  - RSI(9) with 25/70 thresholds catches genuine extremes
+  - Wide SL (3x ATR) avoids stop hunting on high-volatility swings
+  - TP at 2x ATR allows meaningful trend captures
+
+
+================================================================
+3. VOLATILITY 75 INDEX (R_75) - BEST RISK/REWARD BALANCE
 ================================================================
 
 STRATEGY: EMA Crossover (5/21)
 SYMBOL:   R_75
-TIMEFRAME: 1H (Hourly)
+COMPOSITE SCORE: 81.32
 
 ENTRY RULES:
   BUY:  EMA(5) crosses ABOVE EMA(21)
@@ -26,184 +93,205 @@ RISK MANAGEMENT:
   SELL: SL = Entry + (ATR x 3.0)  |  TP = Entry - (ATR x 1.5)
 
 BACKTEST RESULTS:
-  Trades:       248
-  Win Rate:     73.4%
-  Total Return: +89.4%
-  Profit Factor: 1.35
-  R:R Ratio:    0.49
-  Expectancy:   +0.36% per trade
-  Max Drawdown: 20.09%
+  Trades:        247
+  Win Rate:      75.7%  <<<< HIGHEST WIN RATE AMONG STANDARD V-INDICES
+  Total Return:  +70.4%
+  Profit Factor: 1.50
+  Expectancy:    +0.29% per trade
+  Max Drawdown:  10.07%  <<<< LOW DRAWDOWN FOR RETURN LEVEL
+  Sharpe Ratio:  2.73
 
 WHY IT WORKS:
-  - R_75 has strong trending behavior
-  - Fast EMA(5) catches trend early
-  - Wide SL (3x ATR) avoids stop hunting
-  - TP at 1.5x ATR captures trend moves
+  - R_75 has strong sustained trending behavior
+  - Fast EMA(5) catches trend changes early
+  - Wide SL (3x ATR) survives counter-trend noise
+  - 75.7% win rate with only 10% max DD is highly consistent
 
 
 ================================================================
-2. VOLATILITY 100 INDEX (R_100) - SAFEST
+4. VOLATILITY 50 INDEX (R_50)
 ================================================================
 
-STRATEGY: RSI Mean Reversion (25/70)
-SYMBOL:   R_100
-TIMEFRAME: 1H (Hourly)
+STRATEGY: MACD Crossover
+SYMBOL:   R_50
+COMPOSITE SCORE: 65.46
 
 ENTRY RULES:
-  BUY:  RSI(14) drops below 25, then crosses back ABOVE 25
-  SELL: RSI(14) rises above 70, then crosses back BELOW 70
-
-RISK MANAGEMENT:
-  Stop Loss:   3.0 x ATR(14)
-  Take Profit: 1.0 x ATR(14)
-
-  BUY:  SL = Entry - (ATR x 3.0)  |  TP = Entry + (ATR x 1.0)
-  SELL: SL = Entry + (ATR x 3.0)  |  TP = Entry - (ATR x 1.0)
-
-BACKTEST RESULTS:
-  Trades:       101
-  Win Rate:     84.2%  <<<< HIGHEST WIN RATE
-  Total Return: +60.6%
-  Profit Factor: 1.72  <<<< HIGHEST PF
-  R:R Ratio:    0.32
-  Expectancy:   +0.60% per trade
-  Max Drawdown: 11.44% <<<< LOWEST DRAWDOWN
-
-WHY IT WORKS:
-  - R_100 is highly mean-reverting
-  - RSI 25/70 catches oversold/overbought extremes
-  - Wide SL + tight TP = very high win rate (84%)
-  - Only 11.4% max drawdown = safest of all
-
-
-================================================================
-3. VOLATILITY 75 (1s) INDEX [1HZ75V]
-================================================================
-
-STRATEGY: RSI Mean Reversion (25/70)
-SYMBOL:   1HZ75V
-TIMEFRAME: 1H (Hourly)
-
-ENTRY RULES:
-  BUY:  RSI(14) drops below 25, then crosses back ABOVE 25
-  SELL: RSI(14) rises above 70, then crosses back BELOW 70
-
-RISK MANAGEMENT:
-  Stop Loss:   3.0 x ATR(14)
-  Take Profit: 2.5 x ATR(14)
-
-BACKTEST RESULTS:
-  Trades:       100
-  Win Rate:     61.0%
-  Total Return: +45.2%
-  Profit Factor: 1.30
-  R:R Ratio:    0.83
-  Expectancy:   +0.45% per trade
-  Max Drawdown: 34.32%
-
-NOTE: 1s indices are more volatile. Wider TP (2.5x ATR)
-captures bigger moves but higher drawdown risk.
-
-
-================================================================
-4. VOLATILITY 100 (1s) INDEX [1HZ100V]
-================================================================
-
-STRATEGY: RSI Mean Reversion (25/75)
-SYMBOL:   1HZ100V
-TIMEFRAME: 1H (Hourly)
-
-ENTRY RULES:
-  BUY:  RSI(14) drops below 25, then crosses back ABOVE 25
-  SELL: RSI(14) rises above 75, then crosses back BELOW 75
+  BUY:  MACD line crosses ABOVE signal line (histogram turns positive)
+  SELL: MACD line crosses BELOW signal line (histogram turns negative)
 
 RISK MANAGEMENT:
   Stop Loss:   3.0 x ATR(14)
   Take Profit: 2.0 x ATR(14)
 
 BACKTEST RESULTS:
-  Trades:       65
-  Win Rate:     67.7%
-  Total Return: +44.4%
-  Profit Factor: 1.41
-  R:R Ratio:    0.67
-  Expectancy:   +0.68% per trade  <<<< HIGHEST PER TRADE
-  Max Drawdown: 23.22%
+  Trades:        299
+  Win Rate:      65.6%
+  Total Return:  +67.1%
+  Profit Factor: 1.30
+  Expectancy:    +0.22% per trade
+  Max Drawdown:  23.47%
+  Sharpe Ratio:  2.23
 
-ALTERNATIVE (highest total return):
-  MACD SL:3.0 TP:1.5 -> 351 trades, 71.5% WR, +133.5% return
+NOTE: MACD outperforms RSI on R_50, suggesting this index is more
+trend-following than mean-reverting at the tested timeframe.
 
 
 ================================================================
-5. STEP INDEX (stpRNG) - LOWEST RISK
+5. VOLATILITY 10 INDEX (R_10) - SAFEST (LOWEST DRAWDOWN)
 ================================================================
 
-STRATEGY: RSI Mean Reversion (30/75)
-SYMBOL:   stpRNG
-TIMEFRAME: 1H (Hourly)
+STRATEGY: EMA Crossover (9/50)
+SYMBOL:   R_10
+COMPOSITE SCORE: 60.44
 
 ENTRY RULES:
-  BUY:  RSI(14) drops below 30, then crosses back ABOVE 30
-  SELL: RSI(14) rises above 75, then crosses back BELOW 75
+  BUY:  EMA(9) crosses ABOVE EMA(50)
+  SELL: EMA(9) crosses BELOW EMA(50)
 
 RISK MANAGEMENT:
   Stop Loss:   2.0 x ATR(14)
-  Take Profit: 0.75 x ATR(14)
+  Take Profit: 1.5 x ATR(14)
 
 BACKTEST RESULTS:
-  Trades:       129
-  Win Rate:     83.7%
-  Total Return: +4.7%
-  Profit Factor: 1.97
-  R:R Ratio:    0.38
-  Expectancy:   +0.04% per trade
-  Max Drawdown: 0.61%  <<<< LOWEST DRAWDOWN
+  Trades:        179
+  Win Rate:      67.6%
+  Total Return:  +10.2%
+  Profit Factor: 1.61
+  Expectancy:    +0.06% per trade
+  Max Drawdown:  1.42%  <<<< LOWEST DRAWDOWN OF ALL INSTRUMENTS
+  Sharpe Ratio:  3.16   <<<< SECOND-HIGHEST SHARPE OF ALL
 
-NOTE: Step Index moves in tiny fixed steps.
-Very low return but extremely safe. Best for
-learning or micro-lot practice.
+WHY IT WORKS:
+  - R_10 moves slowly and steadily; slower EMA filter reduces false signals
+  - Only 1.42% max drawdown across the full backtest period
+  - Sharpe 3.16 is exceptional — among the best risk-adjusted results overall
+  - Ideal for capital preservation or learning with real funds
+
+
+================================================================
+6. VOLATILITY 25 INDEX (R_25)
+================================================================
+
+STRATEGY: EMA Crossover (5/21)
+SYMBOL:   R_25
+COMPOSITE SCORE: 53.90
+
+ENTRY RULES:
+  BUY:  EMA(5) crosses ABOVE EMA(21)
+  SELL: EMA(5) crosses BELOW EMA(21)
+
+RISK MANAGEMENT:
+  Stop Loss:   3.0 x ATR(14)
+  Take Profit: 1.5 x ATR(14)
+
+BACKTEST RESULTS:
+  Trades:        230
+  Win Rate:      73.0%
+  Total Return:  +26.2%
+  Profit Factor: 1.34
+  Expectancy:    +0.11% per trade
+  Max Drawdown:  6.40%
+  Sharpe Ratio:  2.10
+
+
+================================================================
+7. VOLATILITY 75 (1s) INDEX [1HZ75V]
+================================================================
+
+STRATEGY: RSI Mean Reversion (30/65)
+SYMBOL:   1HZ75V
+COMPOSITE SCORE: 53.41
+
+ENTRY RULES:
+  BUY:  RSI(9) drops below 30, then crosses back ABOVE 30
+  SELL: RSI(9) rises above 65, then crosses back BELOW 65
+
+RISK MANAGEMENT:
+  Stop Loss:   3.0 x ATR(14)
+  Take Profit: 1.0 x ATR(14)
+
+BACKTEST RESULTS:
+  Trades:        571
+  Win Rate:      77.2%  <<<< HIGHEST WIN RATE AMONG 1s INDICES
+  Total Return:  +56.4%
+  Profit Factor: 1.14
+  Expectancy:    +0.10% per trade
+  Max Drawdown:  20.08%
+  Sharpe Ratio:  1.35
+
+NOTE: 1s indices tick faster and generate more signals. Higher win rate
+here but lower profit factor than standard V-indices.
+
+
+================================================================
+8. STEP INDEX (stpRNG) - LOWEST ABSOLUTE RISK
+================================================================
+
+STRATEGY: RSI Mean Reversion (30/65)
+SYMBOL:   stpRNG
+COMPOSITE SCORE: 42.28
+
+ENTRY RULES:
+  BUY:  RSI(9) drops below 30, then crosses back ABOVE 30
+  SELL: RSI(9) rises above 65, then crosses back BELOW 65
+
+RISK MANAGEMENT:
+  Stop Loss:   2.0 x ATR(14)
+  Take Profit: 1.0 x ATR(14)
+
+BACKTEST RESULTS:
+  Trades:        681   <<<< MOST TRADES OF ANY INSTRUMENT
+  Win Rate:      70.2%
+  Total Return:  +8.0%
+  Profit Factor: 1.18
+  Expectancy:    +0.01% per trade
+  Max Drawdown:  2.53%
+  Sharpe Ratio:  2.01
+
+NOTE: Step Index moves in tiny fixed increments. Very low return
+but extremely predictable. Best for learning order execution or
+micro-lot practice without large drawdown exposure.
 
 
 ================================================================
    QUICK REFERENCE TABLE
 ================================================================
 
-Symbol    Strategy      SL    TP    Trades  WR%    Return   PF
---------------------------------------------------------------
-R_75      EMA(5/21)     3.0   1.5   248    73.4%  +89.4%   1.35
-R_100     RSI(25/70)    3.0   1.0   101    84.2%  +60.6%   1.72
-1HZ75V    RSI(25/70)    3.0   2.5   100    61.0%  +45.2%   1.30
-1HZ100V   RSI(25/75)    3.0   2.0    65    67.7%  +44.4%   1.41
-stpRNG    RSI(30/75)    2.0   0.75  129    83.7%   +4.7%   1.97
-
-
-================================================================
-   HIGH WIN RATE ALTERNATIVES (89%+ WR, 20+ trades)
-================================================================
-
-Symbol    Strategy      SL    TP    Trades  WR%    Return
----------------------------------------------------------
-R_100     RSI(25/75)    3.0   0.5    64    92.2%  +27.1%
-R_100     RSI(25/70)    3.0   0.5   108    91.7%  +37.8%
-stpRNG    RSI(30/75)    3.0   0.5   125    91.2%   +2.8%
-1HZ100V   RSI(25/75)    3.0   0.5    68    89.7%  +19.5%
-1HZ75V    EMA(5/21)     3.0   0.5   380    89.5%  +61.3%
+Symbol    Strategy         SL    TP    Trades  WR%    Return    PF    Sharpe  Score
+----------------------------------------------------------------------------------
+1HZ100V   RSI(5, 25/75)    2.0   2.0   574    54.7%  +470.6%   1.25  2.52    237.89
+R_100     RSI(9, 25/70)    3.0   2.0   392    66.6%  +152.0%   1.31  2.53    104.22
+R_75      EMA(5/21)        3.0   1.5   247    75.7%   +70.4%   1.50  2.73     81.32
+R_50      MACD             3.0   2.0   299    65.6%   +67.1%   1.30  2.23     65.46
+R_10      EMA(9/50)        2.0   1.5   179    67.6%   +10.2%   1.61  3.16     60.44
+R_25      EMA(5/21)        3.0   1.5   230    73.0%   +26.2%   1.34  2.10     53.90
+1HZ75V    RSI(9, 30/65)    3.0   1.0   571    77.2%   +56.4%   1.14  1.35     53.41
+stpRNG    RSI(9, 30/65)    2.0   1.0   681    70.2%    +8.0%   1.18  2.01     42.28
 
 
 ================================================================
    KEY INSIGHTS
 ================================================================
 
-1. RSI DOMINATES - Mean reversion works on all synthetic indices
-2. WIDE SL (3.0x ATR) - Prevents stop hunting on volatile indices
-3. R_100 IS SAFEST - 84% WR, 11% max DD, 1.72 PF
-4. R_75 IS MOST PROFITABLE - 89.4% return, 248 trades
-5. STEP INDEX IS FOR PRACTICE - Very low risk/return
-6. 1s INDICES ARE RISKIER - Higher drawdowns (23-34%)
+1. 1HZ100V LEADS ALL INSTRUMENTS — +470.6% return, score 237.89. Requires
+   strict position sizing due to 82.5% max drawdown.
+2. RSI DOMINATES 1s INDICES — Mean reversion works on 1HZ100V and 1HZ75V.
+3. EMA CROSSOVER DOMINATES STANDARD INDICES — R_75, R_25, R_10 all best with
+   EMA crossover. R_50 is best with MACD.
+4. R_100 IS THE BALANCED CHOICE — +152% return with RSI mean reversion;
+   high return without the extreme drawdown of 1HZ100V.
+5. R_10 IS SAFEST — 1.42% max drawdown, Sharpe 3.16. Ideal for
+   capital-preservation or demo-to-live transition.
+6. STEP INDEX IS FOR PRACTICE — Very low return/risk. 681 trades = fast
+   feedback loop for strategy testing.
+7. WIDE SL (3.0x ATR) — Prevents stop hunting on high-volatility indices
+   (R_75, R_100, R_25).
 
 POSITION SIZING RULE:
   Risk 1-2% of account per trade
   NEVER risk more than 5% on synthetic indices
+  For 1HZ100V: limit to 0.5-1% per trade given extreme drawdown
 
 
 ================================================================
@@ -213,8 +301,8 @@ POSITION SIZING RULE:
 - Past performance does NOT guarantee future results
 - Synthetic indices are SIMULATED by Deriv
 - Always start with a demo account
-- These results are on 1H timeframe ONLY
+- Results are from an optimised backtest sweep — forward performance may differ
 - Use proper risk management at all times
-- Combine with your own analysis
+- Combine with your own analysis and current market conditions
 
 ============================================================

@@ -1,0 +1,241 @@
+{
+  "unit": "w03-vol-mid",
+  "instruments": [
+    {
+      "symbol": "R_50",
+      "label": "Volatility 50 Index",
+      "source": "deriv",
+      "cost": 0.0005,
+      "candles": 8761,
+      "best": {
+        "params": {
+          "strategy": "MACD",
+          "sl": 3.0,
+          "tp": 2.0
+        },
+        "result": {
+          "trades": 299,
+          "win_rate": 65.6,
+          "total_return_pct": 57.0,
+          "profit_factor": 1.22,
+          "expectancy_pct": 0.19,
+          "max_drawdown_pct": 29.58,
+          "sharpe": 1.65
+        },
+        "score": 52.46
+      },
+      "holdout": {
+        "params": {
+          "strategy": "MACD",
+          "sl": 3.0,
+          "tp": 2.0
+        },
+        "in_sample": {
+          "trades": 209,
+          "win_rate": 67.5,
+          "total_return_pct": 57.7,
+          "profit_factor": 1.33,
+          "expectancy_pct": 0.276,
+          "max_drawdown_pct": 25.47,
+          "sharpe": 2.03
+        },
+        "out_of_sample": {
+          "trades": 89,
+          "win_rate": 60.7,
+          "total_return_pct": -2.3,
+          "profit_factor": 0.97,
+          "expectancy_pct": -0.026,
+          "max_drawdown_pct": 18.26,
+          "sharpe": -0.12
+        }
+      },
+      "walk_forward": {
+        "folds": 5,
+        "strategies_chosen": [
+          "RSI",
+          "EMA",
+          "MACD",
+          "EMA",
+          "MACD"
+        ],
+        "out_of_sample": {
+          "trades": 249,
+          "win_rate": 67.5,
+          "total_return_pct": -13.6,
+          "profit_factor": 0.92,
+          "expectancy_pct": -0.055,
+          "max_drawdown_pct": 41.49,
+          "sharpe": -0.55
+        }
+      },
+      "verdict": {
+        "survives": false,
+        "reasons": [
+          "holdout PF 0.97 < 1",
+          "holdout return <= 0",
+          "walk-forward PF 0.92 < 1"
+        ]
+      }
+    },
+    {
+      "symbol": "R_25",
+      "label": "Volatility 25 Index",
+      "source": "deriv",
+      "cost": 0.0005,
+      "candles": 8761,
+      "best": {
+        "params": {
+          "strategy": "EMA",
+          "fast": 9,
+          "slow": 21,
+          "sl": 3.0,
+          "tp": 2.5
+        },
+        "result": {
+          "trades": 177,
+          "win_rate": 62.1,
+          "total_return_pct": 20.8,
+          "profit_factor": 1.24,
+          "expectancy_pct": 0.118,
+          "max_drawdown_pct": 14.18,
+          "sharpe": 1.39
+        },
+        "score": 41.26
+      },
+      "holdout": {
+        "params": {
+          "strategy": "EMA",
+          "fast": 5,
+          "slow": 21,
+          "sl": 3.0,
+          "tp": 1.5
+        },
+        "in_sample": {
+          "trades": 159,
+          "win_rate": 74.8,
+          "total_return_pct": 17.5,
+          "profit_factor": 1.33,
+          "expectancy_pct": 0.11,
+          "max_drawdown_pct": 7.16,
+          "sharpe": 1.68
+        },
+        "out_of_sample": {
+          "trades": 69,
+          "win_rate": 68.1,
+          "total_return_pct": -1.8,
+          "profit_factor": 0.94,
+          "expectancy_pct": -0.026,
+          "max_drawdown_pct": 7.69,
+          "sharpe": -0.24
+        }
+      },
+      "walk_forward": {
+        "folds": 5,
+        "strategies_chosen": [
+          "RSI",
+          "EMA",
+          "EMA",
+          "EMA",
+          "EMA"
+        ],
+        "out_of_sample": {
+          "trades": 285,
+          "win_rate": 62.5,
+          "total_return_pct": -15.7,
+          "profit_factor": 0.85,
+          "expectancy_pct": -0.055,
+          "max_drawdown_pct": 18.81,
+          "sharpe": -1.23
+        }
+      },
+      "verdict": {
+        "survives": false,
+        "reasons": [
+          "holdout PF 0.94 < 1",
+          "holdout return <= 0",
+          "walk-forward PF 0.85 < 1"
+        ]
+      }
+    },
+    {
+      "symbol": "R_10",
+      "label": "Volatility 10 Index",
+      "source": "deriv",
+      "cost": 0.0005,
+      "candles": 8761,
+      "best": {
+        "params": {
+          "strategy": "EMA",
+          "fast": 9,
+          "slow": 50,
+          "sl": 2.0,
+          "tp": 1.5
+        },
+        "result": {
+          "trades": 179,
+          "win_rate": 68.2,
+          "total_return_pct": 3.2,
+          "profit_factor": 1.15,
+          "expectancy_pct": 0.018,
+          "max_drawdown_pct": 3.38,
+          "sharpe": 0.88
+        },
+        "score": 33.06
+      },
+      "holdout": {
+        "params": {
+          "strategy": "EMA",
+          "fast": 9,
+          "slow": 50,
+          "sl": 2.0,
+          "tp": 2.5
+        },
+        "in_sample": {
+          "trades": 113,
+          "win_rate": 57.5,
+          "total_return_pct": 5.9,
+          "profit_factor": 1.32,
+          "expectancy_pct": 0.052,
+          "max_drawdown_pct": 1.99,
+          "sharpe": 1.48
+        },
+        "out_of_sample": {
+          "trades": 54,
+          "win_rate": 44.4,
+          "total_return_pct": -2.9,
+          "profit_factor": 0.75,
+          "expectancy_pct": -0.055,
+          "max_drawdown_pct": 3.39,
+          "sharpe": -1.06
+        }
+      },
+      "walk_forward": {
+        "folds": 5,
+        "strategies_chosen": [
+          "EMA",
+          "EMA",
+          "EMA",
+          "EMA",
+          "EMA"
+        ],
+        "out_of_sample": {
+          "trades": 163,
+          "win_rate": 55.8,
+          "total_return_pct": -4.9,
+          "profit_factor": 0.83,
+          "expectancy_pct": -0.03,
+          "max_drawdown_pct": 7.1,
+          "sharpe": -1.09
+        }
+      },
+      "verdict": {
+        "survives": false,
+        "reasons": [
+          "holdout PF 0.75 < 1",
+          "holdout return <= 0",
+          "walk-forward PF 0.83 < 1"
+        ]
+      }
+    }
+  ]
+}

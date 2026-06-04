@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark-purple">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategy Leaderboard - Deriv Trading Dashboard</title>
+    <style>
+        :root {
+            --bg-primary: #0f0f1a;
+            --bg-secondary: #1a1a2e;
+            --bg-card: rgba(26, 26, 46, 0.95);
+            --bg-card-inner: rgba(15, 15, 26, 0.6);
+            --border-color: #2d2d4a;
+            --text-primary: #e0e0e0;
+            --text-secondary: #888;
+            --accent-1: #00d4ff;
+            --accent-2: #7b2cbf;
+            --green: #00ff88;
+            --red: #ff4466;
+            --yellow: #ffc800;
+        }
+
+        [data-theme="dark-purple"] {
+            --bg-primary: #0f0f1a;
+            --bg-secondary: #1a1a2e;
+            --bg-card: rgba(26, 26, 46, 0.95);
+            --bg-card-inner: rgba(15, 15, 26, 0.6);
+            --border-color: #2d2d4a;
+            --text-primary: #e0e0e0;
+            --text-secondary: #888;
+            --accent-1: #00d4ff;
+            --accent-2: #7b2cbf;
+        }
+
+        [data-theme="dark-blue"] {
+            --bg-primary: #0a1628;
+            --bg-secondary: #0d2137;
+            --bg-card: rgba(13, 33, 55, 0.95);
+            --bg-card-inner: rgba(10, 22, 40, 0.6);
+            --border-color: #1e3a5f;
+            --text-primary: #e0e8f0;
+            --text-secondary: #7a9bb8;
+            --accent-1: #3b9eff;
+            --accent-2: #0066cc;
+        }
+
+        [data-theme="dark-green"] {
+            --bg-primary: #0a1a14;
+            --bg-secondary: #0d2a1e;
+            --bg-card: rgba(13, 42, 30, 0.95);
+            --bg-card-inner: rgba(10, 26, 20, 0.6);
+            --border-color: #1e5f3a;
+            --text-primary: #e0f0e8;
+            --text-secondary: #7ab898;
+            --accent-1: #00ff88;
+            --accent-2: #00cc6a;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.95);
+            --bg-card-inner: rgba(245, 247, 250, 0.8);
+            --border-color: #e0e4e8;
+            --text-primary: #1a1a2e;
+            --text-secondary: #666;
+            --accent-1: #0088cc;
+            --accent-2: #6b21a8;
+            --green: #00aa55;
+            --red: #dd3344;
+            --yellow: #cc9900;
+        }
+
+        [data-theme="midnight"] {
+            --bg-primary: #000000;
+            --bg-secondary: #111111;
+            --bg-card: rgba(17, 17, 17, 0.95);
+            --bg-card-inner: rgba(0, 0, 0, 0.6);
+            --border-color: #222222;
+            --text-primary: #ffffff;
+            --text-secondary: #777;
+            --accent-1: #ff6b00;
+            --accent-2: #ff3366;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* ── Header ── */
+        .header {
+            background: var(--bg-card);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo h1 {
+            font-size: 22px;
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        /* ── Nav ── */
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 9px 16px;
+            border-radius: 8px;
+            background: var(--bg-card-inner);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            border-color: var(--accent-1);
+            color: var(--accent-1);
+        }
+
+        .nav-link.active {
+            color: #ffc800;
+            background: rgba(255, 200, 0, 0.12);
+            border-color: #ffc800;
+            font-weight: 600;
+        }
+
+        /* ── Theme switcher ── */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .theme-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .theme-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn:hover { transform: scale(1.15); }
+
+        .theme-btn.active {
+            border-color: var(--accent-1);
+            box-shadow: 0 0 8px var(--accent-1);
+        }
+
+        .theme-btn[data-theme="dark-purple"] { background: linear-gradient(135deg, #0f0f1a, #7b2cbf); }
+        .theme-btn[data-theme="dark-blue"]   { background: linear-gradient(135deg, #0a1628, #3b9eff); }
+        .theme-btn[data-theme="dark-green"]  { background: linear-gradient(135deg, #0a1a14, #00ff88); }
+        .theme-btn[data-theme="light"]       { background: linear-gradient(135deg, #f5f7fa, #0088cc); }
+        .theme-btn[data-theme="midnight"]    { background: linear-gradient(135deg, #000000, #ff6b00); }
+
+        /* ── Page content ── */
+        .page-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
+        }
+
+        /* ── Hero stats bar ── */
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .hero-stat {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 18px 20px;
+            text-align: center;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .hero-stat-value {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--accent-1);
+            line-height: 1.1;
+        }
+
+        .hero-stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 6px;
+        }
+
+        /* ── Table card ── */
+        .table-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .table-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .table-title {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* ── Filter / sort controls ── */
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 6px;
+        }
+
+        .filter-btn {
+            padding: 6px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: var(--bg-card-inner);
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: var(--accent-1);
+            color: var(--accent-1);
+            background: rgba(0, 212, 255, 0.08);
+        }
+
+        .search-input {
+            padding: 7px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: var(--bg-card-inner);
+            color: var(--text-primary);
+            font-size: 12px;
+            outline: none;
+            width: 180px;
+            transition: border-color 0.25s;
+        }
+
+        .search-input:focus { border-color: var(--accent-1); }
+        .search-input::placeholder { color: var(--text-secondary); }
+
+        /* ── Table ── */
+        .lb-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .lb-table thead th {
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            transition: color 0.2s;
+        }
+
+        .lb-table thead th:hover { color: var(--accent-1); }
+
+        .lb-table thead th.sorted-asc::after  { content: ' ▲'; color: var(--accent-1); }
+        .lb-table thead th.sorted-desc::after { content: ' ▼'; color: var(--accent-1); }
+
+        .lb-table tbody tr {
+            border-bottom: 1px solid rgba(45, 45, 74, 0.4);
+            transition: background 0.18s;
+        }
+
+        .lb-table tbody tr:hover { background: rgba(0, 212, 255, 0.05); }
+
+        .lb-table tbody tr.rank-one {
+            background: linear-gradient(90deg, rgba(255, 200, 0, 0.10), rgba(255, 200, 0, 0.03));
+            border-bottom: 1px solid rgba(255, 200, 0, 0.25);
+        }
+
+        .lb-table tbody tr.rank-one:hover {
+            background: linear-gradient(90deg, rgba(255, 200, 0, 0.15), rgba(255, 200, 0, 0.06));
+        }
+
+        .lb-table tbody td {
+            padding: 13px 14px;
+            vertical-align: middle;
+        }
+
+        /* ── Rank cell ── */
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-weight: 800;
+            font-size: 13px;
+            background: var(--bg-card-inner);
+            border: 1px solid var(--border-color);
+        }
+
+        .rank-badge.gold   { background: rgba(255,200,0,0.18); border-color: #ffc800; color: #ffc800; font-size: 16px; }
+        .rank-badge.silver { background: rgba(192,192,192,0.15); border-color: #c0c0c0; color: #c0c0c0; }
+        .rank-badge.bronze { background: rgba(205,127,50,0.15);  border-color: #cd7f32; color: #cd7f32; }
+
+        /* ── Instrument cell ── */
+        .instrument-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .instrument-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .instrument-symbol {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* ── Strategy badge ── */
+        .strategy-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .strategy-RSI  { background: rgba(0, 212, 255, 0.15); color: #00d4ff; border: 1px solid rgba(0,212,255,0.3); }
+        .strategy-EMA  { background: rgba(123,44,191,0.18);   color: #b070ff; border: 1px solid rgba(123,44,191,0.4); }
+        .strategy-MACD { background: rgba(0,255,136,0.13);    color: #00ff88; border: 1px solid rgba(0,255,136,0.3); }
+
+        /* ── Params cell ── */
+        .params-text {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-family: 'Courier New', monospace;
+            white-space: nowrap;
+        }
+
+        /* ── Numeric cells ── */
+        .num-cell {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .positive { color: var(--green, #00ff88); }
+        .negative { color: var(--red, #ff4466); }
+        .neutral  { color: var(--text-secondary); }
+
+        /* ── Win-rate bar ── */
+        .winrate-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 90px;
+        }
+
+        .winrate-label {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .winrate-bar {
+            height: 4px;
+            border-radius: 2px;
+            background: var(--border-color);
+            overflow: hidden;
+        }
+
+        .winrate-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--accent-2), var(--accent-1));
+            transition: width 0.6s ease;
+        }
+
+        /* ── Score cell ── */
+        .score-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            min-width: 80px;
+        }
+
+        .score-value {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--accent-1);
+        }
+
+        .score-bar {
+            height: 3px;
+            border-radius: 2px;
+            background: var(--border-color);
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--accent-2), #ffc800);
+            transition: width 0.6s ease;
+        }
+
+        /* ── Source tag ── */
+        .source-tag {
+            font-size: 10px;
+            padding: 2px 7px;
+            border-radius: 8px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .source-deriv { background: rgba(255,68,102,0.15); color: #ff6b8a; border: 1px solid rgba(255,68,102,0.25); }
+        .source-yahoo { background: rgba(123,44,191,0.15); color: #b070ff; border: 1px solid rgba(123,44,191,0.25); }
+
+        /* ── Empty state ── */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: #3d3d5c; border-radius: 3px; }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .header { flex-wrap: wrap; gap: 12px; }
+            .nav-links { order: 3; width: 100%; }
+            .lb-table { font-size: 12px; }
+            .lb-table td, .lb-table th { padding: 10px 8px; }
+            .params-text { display: none; }
+            .winrate-bar, .score-bar { display: none; }
+        }
+
+        @media (max-width: 600px) {
+            .lb-table thead th:nth-child(n+8) { display: none; }
+            .lb-table tbody td:nth-child(n+8) { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">
+        <svg width="36" height="36" viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="20" r="18" stroke="url(#hgrad)" stroke-width="3"/>
+            <path d="M12 25 L17 15 L23 22 L28 12" stroke="url(#hgrad)" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+                <linearGradient id="hgrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%"   style="stop-color:#00d4ff"/>
+                    <stop offset="100%" style="stop-color:#7b2cbf"/>
+                </linearGradient>
+            </defs>
+        </svg>
+        <h1>Deriv Trading Dashboard</h1>
+    </div>
+
+    <nav class="nav-links">
+        <a href="index.html"                class="nav-link">&#128200; Live Dashboard</a>
+        <a href="price-action-analysis.html" class="nav-link">&#128202; Price Action</a>
+        <a href="rsi-strategy.html"          class="nav-link">&#128200; RSI Strategy</a>
+        <a href="audusd-strategy.html"       class="nav-link">&#128176; AUD/USD</a>
+        <a href="strategy-leaderboard.html"  class="nav-link active">&#127942; Leaderboard</a>
+    </nav>
+
+    <div class="header-right">
+        <div class="theme-selector">
+            <span class="theme-label">Theme:</span>
+            <button class="theme-btn active" data-theme="dark-purple" title="Dark Purple"></button>
+            <button class="theme-btn"        data-theme="dark-blue"   title="Dark Blue"></button>
+            <button class="theme-btn"        data-theme="dark-green"  title="Dark Green"></button>
+            <button class="theme-btn"        data-theme="light"       title="Light"></button>
+            <button class="theme-btn"        data-theme="midnight"    title="Midnight"></button>
+        </div>
+    </div>
+</header>
+
+<main class="page-wrapper">
+
+    <!-- Hero stats bar -->
+    <div class="hero-stats" id="hero-stats"></div>
+
+    <!-- Leaderboard table card -->
+    <div class="table-card">
+        <div class="table-card-header">
+            <div>
+                <div class="table-title">
+                    &#127942; Strategy Leaderboard
+                    <span id="row-count" style="font-size:13px; font-weight:400; color:var(--text-secondary);"></span>
+                </div>
+                <div class="table-subtitle">Backtested across Deriv indices, forex, and crypto — click any column header to sort</div>
+            </div>
+            <div class="controls">
+                <div class="filter-group" id="strategy-filters">
+                    <button class="filter-btn active" data-strategy="all">All</button>
+                    <button class="filter-btn" data-strategy="RSI">RSI</button>
+                    <button class="filter-btn" data-strategy="EMA">EMA</button>
+                    <button class="filter-btn" data-strategy="MACD">MACD</button>
+                </div>
+                <div class="filter-group" id="source-filters">
+                    <button class="filter-btn active" data-source="all">All markets</button>
+                    <button class="filter-btn" data-source="deriv">Deriv</button>
+                    <button class="filter-btn" data-source="yahoo">Yahoo</button>
+                </div>
+                <input class="search-input" id="search" type="text" placeholder="&#128269; Search instrument…">
+            </div>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table class="lb-table">
+                <thead>
+                    <tr id="thead-row">
+                        <th data-col="rank"             data-dir="asc">Rank</th>
+                        <th data-col="label"            data-dir="asc">Instrument</th>
+                        <th data-col="strategy"         data-dir="asc">Strategy</th>
+                        <th data-col="params"           data-dir="asc">Params</th>
+                        <th data-col="win_rate"         data-dir="desc">Win Rate</th>
+                        <th data-col="profit_factor"    data-dir="desc">Profit Factor</th>
+                        <th data-col="total_return_pct" data-dir="desc">Total Return</th>
+                        <th data-col="max_drawdown_pct" data-dir="asc">Max DD</th>
+                        <th data-col="sharpe"           data-dir="desc">Sharpe</th>
+                        <th data-col="trades"           data-dir="desc">Trades</th>
+                        <th data-col="score"            data-dir="desc">Score</th>
+                    </tr>
+                </thead>
+                <tbody id="lb-body"></tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<script>
+// ── Embedded leaderboard data ──────────────────────────────────────────────
+const LEADERBOARD_DATA = [
+  {
+    "symbol": "1HZ100V",
+    "label": "Volatility 100 (1s) Index",
+    "source": "deriv",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 5,
+      "oversold": 25,
+      "overbought": 75,
+      "sl": 2.0,
+      "tp": 2.0
+    },
+    "trades": 574,
+    "win_rate": 54.7,
+    "total_return_pct": 470.6,
+    "profit_factor": 1.25,
+    "expectancy_pct": 0.82,
+    "max_drawdown_pct": 82.53,
+    "sharpe": 2.52,
+    "score": 237.89
+  },
+  {
+    "symbol": "CL=F",
+    "label": "Crude Oil (WTI)",
+    "source": "yahoo",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 5,
+      "oversold": 30,
+      "overbought": 65,
+      "sl": 2.0,
+      "tp": 0.5
+    },
+    "trades": 165,
+    "win_rate": 85.5,
+    "total_return_pct": 154.7,
+    "profit_factor": 1.92,
+    "expectancy_pct": 0.938,
+    "max_drawdown_pct": 18.58,
+    "sharpe": 3.28,
+    "score": 132.46
+  },
+  {
+    "symbol": "R_100",
+    "label": "Volatility 100 Index",
+    "source": "deriv",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 9,
+      "oversold": 25,
+      "overbought": 70,
+      "sl": 3.0,
+      "tp": 2.0
+    },
+    "trades": 392,
+    "win_rate": 66.6,
+    "total_return_pct": 152.0,
+    "profit_factor": 1.31,
+    "expectancy_pct": 0.388,
+    "max_drawdown_pct": 34.35,
+    "sharpe": 2.53,
+    "score": 104.22
+  },
+  {
+    "symbol": "R_75",
+    "label": "Volatility 75 Index",
+    "source": "deriv",
+    "strategy": "EMA",
+    "params": {
+      "strategy": "EMA",
+      "fast": 5,
+      "slow": 21,
+      "sl": 3.0,
+      "tp": 1.5
+    },
+    "trades": 247,
+    "win_rate": 75.7,
+    "total_return_pct": 70.4,
+    "profit_factor": 1.5,
+    "expectancy_pct": 0.285,
+    "max_drawdown_pct": 10.07,
+    "sharpe": 2.73,
+    "score": 81.32
+  },
+  {
+    "symbol": "BTC-USD",
+    "label": "Bitcoin (BTC/USD)",
+    "source": "yahoo",
+    "strategy": "EMA",
+    "params": {
+      "strategy": "EMA",
+      "fast": 9,
+      "slow": 21,
+      "sl": 3.0,
+      "tp": 1.0
+    },
+    "trades": 52,
+    "win_rate": 84.6,
+    "total_return_pct": 159.8,
+    "profit_factor": 2.58,
+    "expectancy_pct": 3.073,
+    "max_drawdown_pct": 30.53,
+    "sharpe": 2.84,
+    "score": 74.53
+  },
+  {
+    "symbol": "GC=F",
+    "label": "Gold (XAU/USD)",
+    "source": "yahoo",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 9,
+      "oversold": 30,
+      "overbought": 65,
+      "sl": 2.0,
+      "tp": 1.0
+    },
+    "trades": 100,
+    "win_rate": 75.0,
+    "total_return_pct": 58.0,
+    "profit_factor": 1.65,
+    "expectancy_pct": 0.58,
+    "max_drawdown_pct": 19.71,
+    "sharpe": 1.82,
+    "score": 69.49
+  },
+  {
+    "symbol": "R_50",
+    "label": "Volatility 50 Index",
+    "source": "deriv",
+    "strategy": "MACD",
+    "params": {
+      "strategy": "MACD",
+      "sl": 3.0,
+      "tp": 2.0
+    },
+    "trades": 299,
+    "win_rate": 65.6,
+    "total_return_pct": 67.1,
+    "profit_factor": 1.3,
+    "expectancy_pct": 0.224,
+    "max_drawdown_pct": 23.47,
+    "sharpe": 2.23,
+    "score": 65.46
+  },
+  {
+    "symbol": "R_10",
+    "label": "Volatility 10 Index",
+    "source": "deriv",
+    "strategy": "EMA",
+    "params": {
+      "strategy": "EMA",
+      "fast": 9,
+      "slow": 50,
+      "sl": 2.0,
+      "tp": 1.5
+    },
+    "trades": 179,
+    "win_rate": 67.6,
+    "total_return_pct": 10.2,
+    "profit_factor": 1.61,
+    "expectancy_pct": 0.057,
+    "max_drawdown_pct": 1.42,
+    "sharpe": 3.16,
+    "score": 60.44
+  },
+  {
+    "symbol": "ETH-USD",
+    "label": "Ethereum (ETH/USD)",
+    "source": "yahoo",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 14,
+      "oversold": 30,
+      "overbought": 65,
+      "sl": 2.0,
+      "tp": 2.0
+    },
+    "trades": 80,
+    "win_rate": 61.3,
+    "total_return_pct": 140.2,
+    "profit_factor": 1.39,
+    "expectancy_pct": 1.753,
+    "max_drawdown_pct": 83.61,
+    "sharpe": 1.33,
+    "score": 55.76
+  },
+  {
+    "symbol": "R_25",
+    "label": "Volatility 25 Index",
+    "source": "deriv",
+    "strategy": "EMA",
+    "params": {
+      "strategy": "EMA",
+      "fast": 5,
+      "slow": 21,
+      "sl": 3.0,
+      "tp": 1.5
+    },
+    "trades": 230,
+    "win_rate": 73.0,
+    "total_return_pct": 26.2,
+    "profit_factor": 1.34,
+    "expectancy_pct": 0.114,
+    "max_drawdown_pct": 6.4,
+    "sharpe": 2.1,
+    "score": 53.9
+  },
+  {
+    "symbol": "1HZ75V",
+    "label": "Volatility 75 (1s) Index",
+    "source": "deriv",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 9,
+      "oversold": 30,
+      "overbought": 65,
+      "sl": 3.0,
+      "tp": 1.0
+    },
+    "trades": 571,
+    "win_rate": 77.2,
+    "total_return_pct": 56.4,
+    "profit_factor": 1.14,
+    "expectancy_pct": 0.099,
+    "max_drawdown_pct": 20.08,
+    "sharpe": 1.35,
+    "score": 53.41
+  },
+  {
+    "symbol": "EURUSD=X",
+    "label": "EUR/USD",
+    "source": "yahoo",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 14,
+      "oversold": 25,
+      "overbought": 75,
+      "sl": 3.0,
+      "tp": 0.5
+    },
+    "trades": 51,
+    "win_rate": 94.1,
+    "total_return_pct": 11.4,
+    "profit_factor": 2.96,
+    "expectancy_pct": 0.224,
+    "max_drawdown_pct": 4.65,
+    "sharpe": 2.83,
+    "score": 46.68
+  },
+  {
+    "symbol": "^GSPC",
+    "label": "S&P 500",
+    "source": "yahoo",
+    "strategy": "MACD",
+    "params": {
+      "strategy": "MACD",
+      "sl": 2.0,
+      "tp": 1.0
+    },
+    "trades": 82,
+    "win_rate": 72.0,
+    "total_return_pct": 28.4,
+    "profit_factor": 1.45,
+    "expectancy_pct": 0.346,
+    "max_drawdown_pct": 8.52,
+    "sharpe": 1.5,
+    "score": 44.03
+  },
+  {
+    "symbol": "stpRNG",
+    "label": "Step Index",
+    "source": "deriv",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 9,
+      "oversold": 30,
+      "overbought": 65,
+      "sl": 2.0,
+      "tp": 1.0
+    },
+    "trades": 681,
+    "win_rate": 70.2,
+    "total_return_pct": 8.0,
+    "profit_factor": 1.18,
+    "expectancy_pct": 0.012,
+    "max_drawdown_pct": 2.53,
+    "sharpe": 2.01,
+    "score": 42.28
+  },
+  {
+    "symbol": "AUDUSD=X",
+    "label": "AUD/USD",
+    "source": "yahoo",
+    "strategy": "MACD",
+    "params": {
+      "strategy": "MACD",
+      "sl": 2.0,
+      "tp": 2.0
+    },
+    "trades": 56,
+    "win_rate": 62.5,
+    "total_return_pct": 34.9,
+    "profit_factor": 1.92,
+    "expectancy_pct": 0.623,
+    "max_drawdown_pct": 10.21,
+    "sharpe": 2.35,
+    "score": 40.37
+  },
+  {
+    "symbol": "USDJPY=X",
+    "label": "USD/JPY",
+    "source": "yahoo",
+    "strategy": "EMA",
+    "params": {
+      "strategy": "EMA",
+      "fast": 5,
+      "slow": 21,
+      "sl": 2.0,
+      "tp": 1.0
+    },
+    "trades": 44,
+    "win_rate": 77.3,
+    "total_return_pct": 26.9,
+    "profit_factor": 2.29,
+    "expectancy_pct": 0.611,
+    "max_drawdown_pct": 5.62,
+    "sharpe": 2.65,
+    "score": 35.7
+  },
+  {
+    "symbol": "GBPUSD=X",
+    "label": "GBP/USD",
+    "source": "yahoo",
+    "strategy": "RSI",
+    "params": {
+      "strategy": "RSI",
+      "period": 14,
+      "oversold": 20,
+      "overbought": 80,
+      "sl": 3.0,
+      "tp": 0.5
+    },
+    "trades": 24,
+    "win_rate": 95.8,
+    "total_return_pct": 6.9,
+    "profit_factor": 4.86,
+    "expectancy_pct": 0.289,
+    "max_drawdown_pct": 1.8,
+    "sharpe": 3.12,
+    "score": 33.52
+  }
+];
+
+// ── State ─────────────────────────────────────────────────────────────────
+let sortCol = 'score';
+let sortDir = 'desc';
+let filterStrategy = 'all';
+let filterSource   = 'all';
+let searchQuery    = '';
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+function paramsToString(p) {
+    const s = p.strategy;
+    if (s === 'RSI')  return `period=${p.period} OB=${p.overbought} OS=${p.oversold} SL=${p.sl} TP=${p.tp}`;
+    if (s === 'EMA')  return `fast=${p.fast} slow=${p.slow} SL=${p.sl} TP=${p.tp}`;
+    if (s === 'MACD') return `SL=${p.sl} TP=${p.tp}`;
+    return '';
+}
+
+function fmt(n, decimals = 2) {
+    return Number(n).toFixed(decimals);
+}
+
+function colorClass(val, goodHigh = true) {
+    if (goodHigh) return val >= 0 ? 'positive' : 'negative';
+    return val <= 0 ? 'positive' : 'negative';
+}
+
+// ── Filtering + sorting ───────────────────────────────────────────────────
+function filteredData() {
+    return LEADERBOARD_DATA.filter(row => {
+        if (filterStrategy !== 'all' && row.strategy !== filterStrategy) return false;
+        if (filterSource   !== 'all' && row.source   !== filterSource)   return false;
+        if (searchQuery) {
+            const q = searchQuery.toLowerCase();
+            if (!row.label.toLowerCase().includes(q) && !row.symbol.toLowerCase().includes(q)) return false;
+        }
+        return true;
+    });
+}
+
+function sortedData() {
+    const data = filteredData();
+    return data.slice().sort((a, b) => {
+        let av, bv;
+        if (sortCol === 'rank') {
+            av = LEADERBOARD_DATA.indexOf(a);
+            bv = LEADERBOARD_DATA.indexOf(b);
+        } else if (sortCol === 'label' || sortCol === 'strategy' || sortCol === 'params') {
+            av = sortCol === 'params' ? paramsToString(a.params) : a[sortCol];
+            bv = sortCol === 'params' ? paramsToString(b.params) : b[sortCol];
+            return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+        } else {
+            av = a[sortCol] !== undefined ? a[sortCol] : a.params[sortCol];
+            bv = b[sortCol] !== undefined ? b[sortCol] : b.params[sortCol];
+        }
+        return sortDir === 'asc' ? av - bv : bv - av;
+    });
+}
+
+// ── Rank badge ────────────────────────────────────────────────────────────
+function rankBadge(rank) {
+    if (rank === 1) return `<span class="rank-badge gold">&#127942;</span>`;
+    if (rank === 2) return `<span class="rank-badge silver">2</span>`;
+    if (rank === 3) return `<span class="rank-badge bronze">3</span>`;
+    return `<span class="rank-badge">${rank}</span>`;
+}
+
+// ── Render table ──────────────────────────────────────────────────────────
+function renderTable() {
+    const rows = sortedData();
+    const maxScore = Math.max(...LEADERBOARD_DATA.map(r => r.score));
+    const tbody = document.getElementById('lb-body');
+
+    document.getElementById('row-count').textContent = `(${rows.length} of ${LEADERBOARD_DATA.length})`;
+
+    if (rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="11" class="empty-state">No strategies match your filters.</td></tr>`;
+        return;
+    }
+
+    // Use original rank from sorted-by-score master list
+    const masterRanks = new Map(
+        LEADERBOARD_DATA.slice()
+            .sort((a, b) => b.score - a.score)
+            .map((r, i) => [r.symbol + r.strategy, i + 1])
+    );
+
+    tbody.innerHTML = rows.map(row => {
+        const rank      = masterRanks.get(row.symbol + row.strategy) || '—';
+        const isTop     = rank === 1;
+        const rowClass  = isTop ? 'rank-one' : '';
+        const returnCls = row.total_return_pct >= 0 ? 'positive' : 'negative';
+        const ddCls     = row.max_drawdown_pct > 50 ? 'negative' : row.max_drawdown_pct > 25 ? '' : 'positive';
+        const sharpeCls = row.sharpe >= 2 ? 'positive' : row.sharpe >= 1 ? '' : 'negative';
+        const pfCls     = row.profit_factor >= 1.5 ? 'positive' : 'neutral';
+        const scorePct  = Math.min(100, (row.score / maxScore) * 100);
+        const wrPct     = Math.min(100, row.win_rate);
+        const sourceCls = `source-${row.source}`;
+
+        return `<tr class="${rowClass}">
+            <td>${rankBadge(rank)}</td>
+            <td>
+                <div class="instrument-cell">
+                    <span class="instrument-name">${row.label}</span>
+                    <span class="instrument-symbol">${row.symbol} &nbsp;<span class="source-tag ${sourceCls}">${row.source.toUpperCase()}</span></span>
+                </div>
+            </td>
+            <td><span class="strategy-badge strategy-${row.strategy}">${row.strategy}</span></td>
+            <td><span class="params-text">${paramsToString(row.params)}</span></td>
+            <td>
+                <div class="winrate-wrap">
+                    <span class="winrate-label ${wrPct >= 70 ? 'positive' : ''}">${fmt(row.win_rate, 1)}%</span>
+                    <div class="winrate-bar"><div class="winrate-fill" style="width:${wrPct}%"></div></div>
+                </div>
+            </td>
+            <td class="num-cell ${pfCls}">${fmt(row.profit_factor)}</td>
+            <td class="num-cell ${returnCls}">${row.total_return_pct >= 0 ? '+' : ''}${fmt(row.total_return_pct, 1)}%</td>
+            <td class="num-cell ${ddCls}">${fmt(row.max_drawdown_pct, 1)}%</td>
+            <td class="num-cell ${sharpeCls}">${fmt(row.sharpe, 2)}</td>
+            <td class="num-cell neutral">${row.trades}</td>
+            <td>
+                <div class="score-cell">
+                    <span class="score-value">${fmt(row.score, 1)}</span>
+                    <div class="score-bar"><div class="score-fill" style="width:${scorePct.toFixed(1)}%"></div></div>
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+// ── Hero stats ────────────────────────────────────────────────────────────
+function renderHeroStats() {
+    const top = LEADERBOARD_DATA[0];
+    const avgWin  = LEADERBOARD_DATA.reduce((s, r) => s + r.win_rate, 0) / LEADERBOARD_DATA.length;
+    const bestPF  = Math.max(...LEADERBOARD_DATA.map(r => r.profit_factor));
+    const bestSh  = Math.max(...LEADERBOARD_DATA.map(r => r.sharpe));
+    const totalTr = LEADERBOARD_DATA.reduce((s, r) => s + r.trades, 0);
+
+    document.getElementById('hero-stats').innerHTML = `
+        <div class="hero-stat">
+            <div class="hero-stat-value" style="color:#ffc800;">&#127942; #1</div>
+            <div class="hero-stat-label">${top.label}</div>
+        </div>
+        <div class="hero-stat">
+            <div class="hero-stat-value">${LEADERBOARD_DATA.length}</div>
+            <div class="hero-stat-label">Strategies Tested</div>
+        </div>
+        <div class="hero-stat">
+            <div class="hero-stat-value" style="color:#00ff88;">${avgWin.toFixed(1)}%</div>
+            <div class="hero-stat-label">Avg Win Rate</div>
+        </div>
+        <div class="hero-stat">
+            <div class="hero-stat-value">${bestPF.toFixed(2)}</div>
+            <div class="hero-stat-label">Best Profit Factor</div>
+        </div>
+        <div class="hero-stat">
+            <div class="hero-stat-value">${bestSh.toFixed(2)}</div>
+            <div class="hero-stat-label">Best Sharpe</div>
+        </div>
+        <div class="hero-stat">
+            <div class="hero-stat-value" style="color:var(--accent-1);">${totalTr.toLocaleString()}</div>
+            <div class="hero-stat-label">Total Backtest Trades</div>
+        </div>
+    `;
+}
+
+// ── Sort header state ─────────────────────────────────────────────────────
+function updateSortHeaders() {
+    document.querySelectorAll('#thead-row th').forEach(th => {
+        th.classList.remove('sorted-asc', 'sorted-desc');
+        if (th.dataset.col === sortCol) {
+            th.classList.add(sortDir === 'asc' ? 'sorted-asc' : 'sorted-desc');
+        }
+    });
+}
+
+// ── Wire up interactions ──────────────────────────────────────────────────
+document.querySelectorAll('#thead-row th').forEach(th => {
+    th.addEventListener('click', () => {
+        const col = th.dataset.col;
+        if (col === sortCol) {
+            sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+        } else {
+            sortCol = col;
+            sortDir = th.dataset.dir || 'desc';
+        }
+        updateSortHeaders();
+        renderTable();
+    });
+});
+
+document.querySelectorAll('#strategy-filters .filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('#strategy-filters .filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterStrategy = btn.dataset.strategy;
+        renderTable();
+    });
+});
+
+document.querySelectorAll('#source-filters .filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('#source-filters .filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterSource = btn.dataset.source;
+        renderTable();
+    });
+});
+
+document.getElementById('search').addEventListener('input', e => {
+    searchQuery = e.target.value.trim();
+    renderTable();
+});
+
+// ── Theme switcher ────────────────────────────────────────────────────────
+const THEME_KEY = 'deriv-theme';
+const savedTheme = localStorage.getItem(THEME_KEY) || 'dark-purple';
+document.documentElement.setAttribute('data-theme', savedTheme);
+
+document.querySelectorAll('.theme-btn').forEach(btn => {
+    if (btn.dataset.theme === savedTheme) btn.classList.add('active');
+    else btn.classList.remove('active');
+
+    btn.addEventListener('click', () => {
+        const theme = btn.dataset.theme;
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem(THEME_KEY, theme);
+        document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b === btn));
+    });
+});
+
+// ── Initial render ────────────────────────────────────────────────────────
+renderHeroStats();
+updateSortHeaders();
+renderTable();
+</script>
+</body>
+</html>

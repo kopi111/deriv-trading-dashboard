@@ -836,6 +836,7 @@
             <a href="price-action-analysis.html" class="nav-link">&#128202; Price Action</a>
             <a href="rsi-strategy.html" class="nav-link active">&#128200; RSI Strategy</a>
             <a href="audusd-strategy.html" class="nav-link">&#128176; AUD/USD</a>
+            <a href="strategy-leaderboard.html" class="nav-link">&#127942; Leaderboard</a>
         </nav>
         <div class="header-right">
             <div class="connection-status">
@@ -873,15 +874,15 @@
             </div>
             <div class="info-item">
                 <div class="info-label">Best Win Rate</div>
-                <div class="info-value" style="color: #00ff88;">53.7% (V50)</div>
+                <div class="info-value" style="color: #00ff88;">77.2% (V75 1s)</div>
             </div>
             <div class="info-item">
                 <div class="info-label">Best PF</div>
-                <div class="info-value" style="color: #00ff88;">1.25 (V50/V75)</div>
+                <div class="info-value" style="color: #00ff88;">1.31 (V100)</div>
             </div>
             <div class="info-item">
                 <div class="info-label">Best Sharpe</div>
-                <div class="info-value" style="color: #ffc800;">1.53 (V75)</div>
+                <div class="info-value" style="color: #ffc800;">2.53 (V100)</div>
             </div>
         </div>
 
@@ -951,7 +952,7 @@
         // ============================================
         // OPTIMIZED RSI SETTINGS FROM 15-MIN BACKTESTING
         // Tested 5000 candles (~52 days) per index
-        // Nov 13, 2025 to Jan 4, 2026
+        // Last backtested: 2026-06-04
         // ============================================
         const OPTIMIZED_SETTINGS = {
             // Standard Volatility Indices
@@ -959,14 +960,14 @@
             'R_25': { rsiPeriod: 5, oversold: 20, overbought: 75, winRate: 50.0, profitFactor: 1.18, sharpe: 1.18, trades: 380 },
             'R_50': { rsiPeriod: 9, oversold: 35, overbought: 65, winRate: 53.7, profitFactor: 1.25, sharpe: 1.52, trades: 445 },
             'R_75': { rsiPeriod: 5, oversold: 25, overbought: 75, winRate: 50.6, profitFactor: 1.25, sharpe: 1.53, trades: 420 },
-            'R_100': { rsiPeriod: 5, oversold: 25, overbought: 80, winRate: 52.6, profitFactor: 1.21, sharpe: 1.34, trades: 398 },
+            'R_100': { rsiPeriod: 9, oversold: 25, overbought: 70, winRate: 66.6, profitFactor: 1.31, sharpe: 2.53, trades: 392 },
             // 1-Second Volatility Indices (using similar settings)
             '1HZ10V': { rsiPeriod: 5, oversold: 20, overbought: 80, winRate: 52.8, profitFactor: 1.13, sharpe: 0.85, trades: 313 },
             '1HZ25V': { rsiPeriod: 5, oversold: 20, overbought: 75, winRate: 50.0, profitFactor: 1.18, sharpe: 1.18, trades: 380 },
             '1HZ31V': { rsiPeriod: 7, oversold: 25, overbought: 70, winRate: 51.0, profitFactor: 1.20, sharpe: 1.30, trades: 400 },
             '1HZ50V': { rsiPeriod: 9, oversold: 35, overbought: 65, winRate: 53.7, profitFactor: 1.25, sharpe: 1.52, trades: 445 },
-            '1HZ75V': { rsiPeriod: 5, oversold: 25, overbought: 75, winRate: 50.6, profitFactor: 1.25, sharpe: 1.53, trades: 420 },
-            '1HZ100V': { rsiPeriod: 5, oversold: 25, overbought: 80, winRate: 52.6, profitFactor: 1.21, sharpe: 1.34, trades: 398 }
+            '1HZ75V': { rsiPeriod: 9, oversold: 30, overbought: 65, winRate: 77.2, profitFactor: 1.14, sharpe: 1.35, trades: 571 },
+            '1HZ100V': { rsiPeriod: 5, oversold: 25, overbought: 75, winRate: 54.7, profitFactor: 1.25, sharpe: 2.52, trades: 574 }
         };
 
         const assets = [

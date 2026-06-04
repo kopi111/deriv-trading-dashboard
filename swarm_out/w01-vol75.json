@@ -1,0 +1,81 @@
+{
+  "unit": "w01-vol75",
+  "instruments": [
+    {
+      "symbol": "R_75",
+      "label": "Volatility 75 Index",
+      "source": "deriv",
+      "cost": 0.0005,
+      "candles": 8761,
+      "best": {
+        "params": {
+          "strategy": "EMA",
+          "fast": 5,
+          "slow": 21,
+          "sl": 3.0,
+          "tp": 1.5
+        },
+        "result": {
+          "trades": 247,
+          "win_rate": 75.7,
+          "total_return_pct": 112.2,
+          "profit_factor": 1.48,
+          "expectancy_pct": 0.454,
+          "max_drawdown_pct": 14.33,
+          "sharpe": 2.9
+        },
+        "score": 100.43
+      },
+      "holdout": {
+        "params": {
+          "strategy": "EMA",
+          "fast": 5,
+          "slow": 21,
+          "sl": 3.0,
+          "tp": 1.5
+        },
+        "in_sample": {
+          "trades": 171,
+          "win_rate": 75.4,
+          "total_return_pct": 73.7,
+          "profit_factor": 1.45,
+          "expectancy_pct": 0.431,
+          "max_drawdown_pct": 14.33,
+          "sharpe": 2.28
+        },
+        "out_of_sample": {
+          "trades": 75,
+          "win_rate": 76.0,
+          "total_return_pct": 36.8,
+          "profit_factor": 1.53,
+          "expectancy_pct": 0.491,
+          "max_drawdown_pct": 11.57,
+          "sharpe": 1.75
+        }
+      },
+      "walk_forward": {
+        "folds": 5,
+        "strategies_chosen": [
+          "RSI",
+          "RSI",
+          "RSI",
+          "EMA",
+          "EMA"
+        ],
+        "out_of_sample": {
+          "trades": 400,
+          "win_rate": 83.0,
+          "total_return_pct": 53.9,
+          "profit_factor": 1.24,
+          "expectancy_pct": 0.135,
+          "max_drawdown_pct": 28.69,
+          "sharpe": 1.66
+        }
+      },
+      "verdict": {
+        "survives": true,
+        "reasons": []
+      }
+    }
+  ]
+}

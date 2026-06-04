@@ -1,0 +1,85 @@
+{
+  "unit": "w05-step",
+  "instruments": [
+    {
+      "symbol": "stpRNG",
+      "label": "Step Index",
+      "source": "deriv",
+      "cost": 0.0005,
+      "candles": 8761,
+      "best": {
+        "params": {
+          "strategy": "EMA",
+          "fast": 5,
+          "slow": 21,
+          "sl": 3.0,
+          "tp": 2.5
+        },
+        "result": {
+          "trades": 190,
+          "win_rate": 60.0,
+          "total_return_pct": -2.8,
+          "profit_factor": 0.91,
+          "expectancy_pct": -0.015,
+          "max_drawdown_pct": 5.12,
+          "sharpe": -0.64
+        },
+        "score": 15.59
+      },
+      "holdout": {
+        "params": {
+          "strategy": "EMA",
+          "fast": 5,
+          "slow": 21,
+          "sl": 3.0,
+          "tp": 2.5
+        },
+        "in_sample": {
+          "trades": 133,
+          "win_rate": 59.4,
+          "total_return_pct": -2.6,
+          "profit_factor": 0.88,
+          "expectancy_pct": -0.019,
+          "max_drawdown_pct": 5.12,
+          "sharpe": -0.69
+        },
+        "out_of_sample": {
+          "trades": 56,
+          "win_rate": 60.7,
+          "total_return_pct": -0.5,
+          "profit_factor": 0.94,
+          "expectancy_pct": -0.01,
+          "max_drawdown_pct": 3.13,
+          "sharpe": -0.23
+        }
+      },
+      "walk_forward": {
+        "folds": 5,
+        "strategies_chosen": [
+          "EMA",
+          "EMA",
+          "EMA",
+          "EMA",
+          "EMA"
+        ],
+        "out_of_sample": {
+          "trades": 151,
+          "win_rate": 49.0,
+          "total_return_pct": -5.8,
+          "profit_factor": 0.76,
+          "expectancy_pct": -0.039,
+          "max_drawdown_pct": 9.58,
+          "sharpe": -1.68
+        }
+      },
+      "verdict": {
+        "survives": false,
+        "reasons": [
+          "holdout PF 0.94 < 1",
+          "holdout return <= 0",
+          "walk-forward PF 0.76 < 1"
+        ]
+      }
+    }
+  ]
+}

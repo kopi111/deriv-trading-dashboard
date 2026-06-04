@@ -1,0 +1,164 @@
+{
+  "unit": "w04-vol-1s",
+  "instruments": [
+    {
+      "symbol": "1HZ75V",
+      "label": "Volatility 75 (1s) Index",
+      "source": "deriv",
+      "cost": 0.0005,
+      "candles": 8761,
+      "best": {
+        "params": {
+          "strategy": "EMA",
+          "fast": 5,
+          "slow": 21,
+          "sl": 2.0,
+          "tp": 0.5
+        },
+        "result": {
+          "trades": 390,
+          "win_rate": 83.1,
+          "total_return_pct": 19.3,
+          "profit_factor": 1.11,
+          "expectancy_pct": 0.05,
+          "max_drawdown_pct": 17.21,
+          "sharpe": 0.82
+        },
+        "score": 32.9
+      },
+      "holdout": {
+        "params": {
+          "strategy": "RSI",
+          "period": 9,
+          "oversold": 30,
+          "overbought": 65,
+          "sl": 3.0,
+          "tp": 1.0
+        },
+        "in_sample": {
+          "trades": 402,
+          "win_rate": 78.1,
+          "total_return_pct": 45.2,
+          "profit_factor": 1.13,
+          "expectancy_pct": 0.112,
+          "max_drawdown_pct": 21.12,
+          "sharpe": 1.07
+        },
+        "out_of_sample": {
+          "trades": 169,
+          "win_rate": 75.1,
+          "total_return_pct": -8.9,
+          "profit_factor": 0.95,
+          "expectancy_pct": -0.053,
+          "max_drawdown_pct": 25.81,
+          "sharpe": -0.31
+        }
+      },
+      "walk_forward": {
+        "folds": 5,
+        "strategies_chosen": [
+          "RSI",
+          "EMA",
+          "RSI",
+          "RSI",
+          "RSI"
+        ],
+        "out_of_sample": {
+          "trades": 375,
+          "win_rate": 75.2,
+          "total_return_pct": -37.1,
+          "profit_factor": 0.89,
+          "expectancy_pct": -0.099,
+          "max_drawdown_pct": 43.82,
+          "sharpe": -0.95
+        }
+      },
+      "verdict": {
+        "survives": false,
+        "reasons": [
+          "holdout PF 0.95 < 1",
+          "holdout return <= 0",
+          "walk-forward PF 0.89 < 1"
+        ]
+      }
+    },
+    {
+      "symbol": "1HZ100V",
+      "label": "Volatility 100 (1s) Index",
+      "source": "deriv",
+      "cost": 0.0005,
+      "candles": 8761,
+      "best": {
+        "params": {
+          "strategy": "RSI",
+          "period": 5,
+          "oversold": 25,
+          "overbought": 75,
+          "sl": 2.0,
+          "tp": 2.0
+        },
+        "result": {
+          "trades": 574,
+          "win_rate": 54.7,
+          "total_return_pct": 156.0,
+          "profit_factor": 1.17,
+          "expectancy_pct": 0.272,
+          "max_drawdown_pct": 52.04,
+          "sharpe": 1.91
+        },
+        "score": 90.78
+      },
+      "holdout": {
+        "params": {
+          "strategy": "MACD",
+          "sl": 3.0,
+          "tp": 1.5
+        },
+        "in_sample": {
+          "trades": 248,
+          "win_rate": 73.8,
+          "total_return_pct": 127.8,
+          "profit_factor": 1.39,
+          "expectancy_pct": 0.515,
+          "max_drawdown_pct": 20.44,
+          "sharpe": 2.41
+        },
+        "out_of_sample": {
+          "trades": 114,
+          "win_rate": 65.8,
+          "total_return_pct": -16.8,
+          "profit_factor": 0.92,
+          "expectancy_pct": -0.148,
+          "max_drawdown_pct": 37.62,
+          "sharpe": -0.43
+        }
+      },
+      "walk_forward": {
+        "folds": 5,
+        "strategies_chosen": [
+          "MACD",
+          "MACD",
+          "MACD",
+          "MACD",
+          "MACD"
+        ],
+        "out_of_sample": {
+          "trades": 330,
+          "win_rate": 70.3,
+          "total_return_pct": 30.0,
+          "profit_factor": 1.06,
+          "expectancy_pct": 0.091,
+          "max_drawdown_pct": 48.79,
+          "sharpe": 0.52
+        }
+      },
+      "verdict": {
+        "survives": false,
+        "reasons": [
+          "holdout PF 0.92 < 1",
+          "holdout return <= 0"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,242 @@
+{
+  "unit": "w08-fx-majors",
+  "instruments": [
+    {
+      "symbol": "EURUSD=X",
+      "label": "EUR/USD",
+      "source": "yahoo",
+      "cost": 0.00012,
+      "candles": 1300,
+      "best": {
+        "params": {
+          "strategy": "RSI",
+          "period": 14,
+          "oversold": 25,
+          "overbought": 75,
+          "sl": 3.0,
+          "tp": 0.5
+        },
+        "result": {
+          "trades": 51,
+          "win_rate": 94.1,
+          "total_return_pct": 12.2,
+          "profit_factor": 2.93,
+          "expectancy_pct": 0.24,
+          "max_drawdown_pct": 5.13,
+          "sharpe": 2.76
+        },
+        "score": 46.2
+      },
+      "holdout": {
+        "params": {
+          "strategy": "RSI",
+          "period": 14,
+          "oversold": 30,
+          "overbought": 65,
+          "sl": 3.0,
+          "tp": 0.5
+        },
+        "in_sample": {
+          "trades": 56,
+          "win_rate": 91.1,
+          "total_return_pct": 7.3,
+          "profit_factor": 1.56,
+          "expectancy_pct": 0.131,
+          "max_drawdown_pct": 4.36,
+          "sharpe": 1.08
+        },
+        "out_of_sample": {
+          "trades": 21,
+          "win_rate": 85.7,
+          "total_return_pct": -0.8,
+          "profit_factor": 0.89,
+          "expectancy_pct": -0.04,
+          "max_drawdown_pct": 4.04,
+          "sharpe": -0.18
+        }
+      },
+      "walk_forward": {
+        "folds": 5,
+        "strategies_chosen": [
+          "RSI",
+          "RSI",
+          "RSI",
+          "RSI",
+          "RSI"
+        ],
+        "out_of_sample": {
+          "trades": 68,
+          "win_rate": 82.4,
+          "total_return_pct": -3.9,
+          "profit_factor": 0.86,
+          "expectancy_pct": -0.058,
+          "max_drawdown_pct": 9.88,
+          "sharpe": -0.44
+        }
+      },
+      "verdict": {
+        "survives": false,
+        "reasons": [
+          "holdout PF 0.89 < 1",
+          "holdout return <= 0",
+          "walk-forward PF 0.86 < 1"
+        ]
+      }
+    },
+    {
+      "symbol": "GBPUSD=X",
+      "label": "GBP/USD",
+      "source": "yahoo",
+      "cost": 0.00015,
+      "candles": 1300,
+      "best": {
+        "params": {
+          "strategy": "RSI",
+          "period": 14,
+          "oversold": 20,
+          "overbought": 80,
+          "sl": 3.0,
+          "tp": 0.5
+        },
+        "result": {
+          "trades": 24,
+          "win_rate": 95.8,
+          "total_return_pct": 7.5,
+          "profit_factor": 4.86,
+          "expectancy_pct": 0.313,
+          "max_drawdown_pct": 1.95,
+          "sharpe": 3.05
+        },
+        "score": 33.49
+      },
+      "holdout": {
+        "params": {
+          "strategy": "MACD",
+          "sl": 2.0,
+          "tp": 1.5
+        },
+        "in_sample": {
+          "trades": 47,
+          "win_rate": 68.1,
+          "total_return_pct": 14.6,
+          "profit_factor": 1.56,
+          "expectancy_pct": 0.311,
+          "max_drawdown_pct": 4.62,
+          "sharpe": 1.43
+        },
+        "out_of_sample": {
+          "trades": 18,
+          "win_rate": 61.1,
+          "total_return_pct": 3.2,
+          "profit_factor": 1.29,
+          "expectancy_pct": 0.18,
+          "max_drawdown_pct": 3.61,
+          "sharpe": 0.53
+        }
+      },
+      "walk_forward": {
+        "folds": 5,
+        "strategies_chosen": [
+          "RSI",
+          "RSI",
+          "MACD",
+          "MACD",
+          "RSI"
+        ],
+        "out_of_sample": {
+          "trades": 43,
+          "win_rate": 67.4,
+          "total_return_pct": -9.7,
+          "profit_factor": 0.72,
+          "expectancy_pct": -0.226,
+          "max_drawdown_pct": 16.81,
+          "sharpe": -0.79
+        }
+      },
+      "verdict": {
+        "survives": false,
+        "reasons": [
+          "walk-forward PF 0.72 < 1"
+        ]
+      }
+    },
+    {
+      "symbol": "USDJPY=X",
+      "label": "USD/JPY",
+      "source": "yahoo",
+      "cost": 0.00015,
+      "candles": 1300,
+      "best": {
+        "params": {
+          "strategy": "EMA",
+          "fast": 5,
+          "slow": 21,
+          "sl": 2.0,
+          "tp": 1.0
+        },
+        "result": {
+          "trades": 44,
+          "win_rate": 77.3,
+          "total_return_pct": 19.5,
+          "profit_factor": 2.17,
+          "expectancy_pct": 0.443,
+          "max_drawdown_pct": 4.79,
+          "sharpe": 2.49
+        },
+        "score": 32.58
+      },
+      "holdout": {
+        "params": {
+          "strategy": "EMA",
+          "fast": 5,
+          "slow": 21,
+          "sl": 2.0,
+          "tp": 1.0
+        },
+        "in_sample": {
+          "trades": 25,
+          "win_rate": 80.0,
+          "total_return_pct": 14.5,
+          "profit_factor": 3.12,
+          "expectancy_pct": 0.58,
+          "max_drawdown_pct": 4.79,
+          "sharpe": 2.85
+        },
+        "out_of_sample": {
+          "trades": 17,
+          "win_rate": 70.6,
+          "total_return_pct": 2.7,
+          "profit_factor": 1.28,
+          "expectancy_pct": 0.16,
+          "max_drawdown_pct": 4.26,
+          "sharpe": 0.48
+        }
+      },
+      "walk_forward": {
+        "folds": 5,
+        "strategies_chosen": [
+          "RSI",
+          "RSI",
+          "RSI",
+          "EMA",
+          "EMA"
+        ],
+        "out_of_sample": {
+          "trades": 78,
+          "win_rate": 70.5,
+          "total_return_pct": -6.3,
+          "profit_factor": 0.86,
+          "expectancy_pct": -0.081,
+          "max_drawdown_pct": 13.49,
+          "sharpe": -0.56
+        }
+      },
+      "verdict": {
+        "survives": false,
+        "reasons": [
+          "walk-forward PF 0.86 < 1"
+        ]
+      }
+    }
+  ]
+}

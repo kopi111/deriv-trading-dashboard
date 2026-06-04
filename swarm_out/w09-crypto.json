@@ -1,0 +1,164 @@
+{
+  "unit": "w09-crypto",
+  "instruments": [
+    {
+      "symbol": "BTC-USD",
+      "label": "Bitcoin (BTC/USD)",
+      "source": "yahoo",
+      "cost": 0.0015,
+      "candles": 1827,
+      "best": {
+        "params": {
+          "strategy": "EMA",
+          "fast": 9,
+          "slow": 21,
+          "sl": 3.0,
+          "tp": 1.5
+        },
+        "result": {
+          "trades": 48,
+          "win_rate": 79.2,
+          "total_return_pct": 111.3,
+          "profit_factor": 2.05,
+          "expectancy_pct": 2.318,
+          "max_drawdown_pct": 32.37,
+          "sharpe": 2.32
+        },
+        "score": 49.11
+      },
+      "holdout": {
+        "params": {
+          "strategy": "RSI",
+          "period": 9,
+          "oversold": 30,
+          "overbought": 70,
+          "sl": 3.0,
+          "tp": 0.5
+        },
+        "in_sample": {
+          "trades": 89,
+          "win_rate": 89.9,
+          "total_return_pct": 54.5,
+          "profit_factor": 1.55,
+          "expectancy_pct": 0.612,
+          "max_drawdown_pct": 26.04,
+          "sharpe": 1.4
+        },
+        "out_of_sample": {
+          "trades": 43,
+          "win_rate": 76.7,
+          "total_return_pct": -58.2,
+          "profit_factor": 0.46,
+          "expectancy_pct": -1.353,
+          "max_drawdown_pct": 63.84,
+          "sharpe": -1.64
+        }
+      },
+      "walk_forward": {
+        "folds": 5,
+        "strategies_chosen": [
+          "RSI",
+          "RSI",
+          "RSI",
+          "RSI",
+          "EMA"
+        ],
+        "out_of_sample": {
+          "trades": 85,
+          "win_rate": 72.9,
+          "total_return_pct": -38.1,
+          "profit_factor": 0.79,
+          "expectancy_pct": -0.448,
+          "max_drawdown_pct": 60.53,
+          "sharpe": -0.84
+        }
+      },
+      "verdict": {
+        "survives": false,
+        "reasons": [
+          "holdout PF 0.46 < 1",
+          "holdout return <= 0",
+          "walk-forward PF 0.79 < 1"
+        ]
+      }
+    },
+    {
+      "symbol": "ETH-USD",
+      "label": "Ethereum (ETH/USD)",
+      "source": "yahoo",
+      "cost": 0.002,
+      "candles": 1827,
+      "best": {
+        "params": {
+          "strategy": "RSI",
+          "period": 14,
+          "oversold": 30,
+          "overbought": 65,
+          "sl": 2.0,
+          "tp": 2.0
+        },
+        "result": {
+          "trades": 80,
+          "win_rate": 61.3,
+          "total_return_pct": 151.5,
+          "profit_factor": 1.42,
+          "expectancy_pct": 1.893,
+          "max_drawdown_pct": 88.23,
+          "sharpe": 1.46
+        },
+        "score": 59.55
+      },
+      "holdout": {
+        "params": {
+          "strategy": "RSI",
+          "period": 14,
+          "oversold": 30,
+          "overbought": 65,
+          "sl": 2.0,
+          "tp": 2.0
+        },
+        "in_sample": {
+          "trades": 58,
+          "win_rate": 60.3,
+          "total_return_pct": 120.3,
+          "profit_factor": 1.48,
+          "expectancy_pct": 2.075,
+          "max_drawdown_pct": 42.1,
+          "sharpe": 1.4
+        },
+        "out_of_sample": {
+          "trades": 21,
+          "win_rate": 61.9,
+          "total_return_pct": 20.0,
+          "profit_factor": 1.18,
+          "expectancy_pct": 0.954,
+          "max_drawdown_pct": 55.22,
+          "sharpe": 0.35
+        }
+      },
+      "walk_forward": {
+        "folds": 5,
+        "strategies_chosen": [
+          "RSI",
+          "RSI",
+          "RSI",
+          "RSI",
+          "RSI"
+        ],
+        "out_of_sample": {
+          "trades": 76,
+          "win_rate": 67.1,
+          "total_return_pct": 25.0,
+          "profit_factor": 1.09,
+          "expectancy_pct": 0.329,
+          "max_drawdown_pct": 81.21,
+          "sharpe": 0.3
+        }
+      },
+      "verdict": {
+        "survives": true,
+        "reasons": []
+      }
+    }
+  ]
+}

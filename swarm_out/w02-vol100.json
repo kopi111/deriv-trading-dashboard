@@ -1,0 +1,86 @@
+{
+  "unit": "w02-vol100",
+  "instruments": [
+    {
+      "symbol": "R_100",
+      "label": "Volatility 100 Index",
+      "source": "deriv",
+      "cost": 0.0005,
+      "candles": 8761,
+      "best": {
+        "params": {
+          "strategy": "RSI",
+          "period": 9,
+          "oversold": 25,
+          "overbought": 70,
+          "sl": 3.0,
+          "tp": 2.0
+        },
+        "result": {
+          "trades": 392,
+          "win_rate": 66.6,
+          "total_return_pct": 196.3,
+          "profit_factor": 1.29,
+          "expectancy_pct": 0.501,
+          "max_drawdown_pct": 59.09,
+          "sharpe": 2.46
+        },
+        "score": 113.16
+      },
+      "holdout": {
+        "params": {
+          "strategy": "EMA",
+          "fast": 12,
+          "slow": 26,
+          "sl": 3.0,
+          "tp": 1.5
+        },
+        "in_sample": {
+          "trades": 127,
+          "win_rate": 75.6,
+          "total_return_pct": 78.2,
+          "profit_factor": 1.49,
+          "expectancy_pct": 0.616,
+          "max_drawdown_pct": 15.67,
+          "sharpe": 2.1
+        },
+        "out_of_sample": {
+          "trades": 63,
+          "win_rate": 49.2,
+          "total_return_pct": -88.6,
+          "profit_factor": 0.46,
+          "expectancy_pct": -1.406,
+          "max_drawdown_pct": 108.12,
+          "sharpe": -2.92
+        }
+      },
+      "walk_forward": {
+        "folds": 5,
+        "strategies_chosen": [
+          "RSI",
+          "RSI",
+          "RSI",
+          "EMA",
+          "RSI"
+        ],
+        "out_of_sample": {
+          "trades": 352,
+          "win_rate": 83.2,
+          "total_return_pct": -19.3,
+          "profit_factor": 0.93,
+          "expectancy_pct": -0.055,
+          "max_drawdown_pct": 49.99,
+          "sharpe": -0.47
+        }
+      },
+      "verdict": {
+        "survives": false,
+        "reasons": [
+          "holdout PF 0.46 < 1",
+          "holdout return <= 0",
+          "walk-forward PF 0.93 < 1"
+        ]
+      }
+    }
+  ]
+}

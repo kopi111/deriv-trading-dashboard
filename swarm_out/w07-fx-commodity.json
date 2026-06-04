@@ -1,0 +1,84 @@
+{
+  "unit": "w07-fx-commodity",
+  "instruments": [
+    {
+      "symbol": "AUDUSD=X",
+      "label": "AUD/USD",
+      "source": "yahoo",
+      "cost": 0.00015,
+      "candles": 1300,
+      "best": {
+        "params": {
+          "strategy": "RSI",
+          "period": 5,
+          "oversold": 20,
+          "overbought": 80,
+          "sl": 2.0,
+          "tp": 1.0
+        },
+        "result": {
+          "trades": 109,
+          "win_rate": 72.5,
+          "total_return_pct": 13.4,
+          "profit_factor": 1.19,
+          "expectancy_pct": 0.123,
+          "max_drawdown_pct": 14.58,
+          "sharpe": 0.81
+        },
+        "score": 33.21
+      },
+      "holdout": {
+        "params": {
+          "strategy": "EMA",
+          "fast": 5,
+          "slow": 21,
+          "sl": 2.0,
+          "tp": 0.5
+        },
+        "in_sample": {
+          "trades": 41,
+          "win_rate": 87.8,
+          "total_return_pct": 8.6,
+          "profit_factor": 1.75,
+          "expectancy_pct": 0.21,
+          "max_drawdown_pct": 7.13,
+          "sharpe": 1.41
+        },
+        "out_of_sample": {
+          "trades": 19,
+          "win_rate": 84.2,
+          "total_return_pct": 2.7,
+          "profit_factor": 1.48,
+          "expectancy_pct": 0.142,
+          "max_drawdown_pct": 3.24,
+          "sharpe": 0.69
+        }
+      },
+      "walk_forward": {
+        "folds": 5,
+        "strategies_chosen": [
+          "RSI",
+          "MACD",
+          "RSI",
+          "MACD",
+          "EMA"
+        ],
+        "out_of_sample": {
+          "trades": 64,
+          "win_rate": 67.2,
+          "total_return_pct": -23.7,
+          "profit_factor": 0.59,
+          "expectancy_pct": -0.37,
+          "max_drawdown_pct": 33.3,
+          "sharpe": -1.63
+        }
+      },
+      "verdict": {
+        "survives": false,
+        "reasons": [
+          "walk-forward PF 0.59 < 1"
+        ]
+      }
+    }
+  ]
+}
